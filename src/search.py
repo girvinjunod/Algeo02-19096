@@ -10,12 +10,17 @@ fieldname = ['Word','Q','D1','D2','D3','D4','D5'
 """
 example_sent = "This is a sample sentence, showing off the stop words filtration."
 path_to_folder = "./test"
-fieldname = ['Word','Q']
+fieldnames, kalimat = read_file(path_to_folder)
+query = input("Masukkan Pencarian:")
+q = clean_document(query)
+score = []
+
 def read_file(path_to_folder):
     kal = []
     num = 0
     for i in os.listdir(path_to_folder): 
         if i.endswith('.txt'): 
+            fieldname = ['Word','Q']
             fieldname.append(i)
             f = open(i,'r')
             a = f.read()
@@ -36,28 +41,67 @@ def clean_document(example_sent):
     b = filter #kata setelah difilter
     return b
 
-fieldnames, kalimat = read_file(path_to_folder)
-
-def query_table (kalimat, num):
-    n = [" " for k in range (2,num)]
-    qmat = [[" " for j in range (10000)] for i in range (num)]
-    for i in range (num):
+def query_table (query, kalimat, num):
+    #input query & kalimat yang telah di clean
+    n = ["0" for k in range (num)]
+    found = False
+    foundq = False
+    qmat = [["0" for j in range (10000)] for i in range (num)]
+    for i in range (2,num):
+        j = 0
         n = clean_document(kalimat[i])
-        for j in range (n):
-            while n[j]!=" ":
+        while ((j < n) and (found == False)):
+            while ((n[j]!="0") and (found == False)):
                 if (qmat[j][0] == n[j]):
                     a = int(qmat[j][i])
                     a += 1
                     qmat[j][i] = str(a)
+                    found = True
                 else:
                     j += 1
+            if (found == False):
+                q[j][0] = n[j]
+                d = int(qmat[j][i])
+                d += 1
+                qmat[j][i] = str(d)
+                found = True
+    for i in range(query):
+        while ((n[j]!="0") and (foundq == False)):
+            if (qmat[j][0] == n[j]):
+                a = int(qmat[j][1])
+                a += 1
+                qmat[j][1] = str(a)
+                foundq = True
+            else:
+                j += 1
+            if (foundq == False):
+                q[j][0] = n[j]
+                d = int(qmat[j][1])
+                d += 1
+                qmat[j][1] = str(a)
+                foundq = True
     return qmat
 
-
-
+def similar(qmat,num):
+    for i in range (2,num):
+        j = 0
+        u = 0
+        uv = 0 #u.v 
+        v = 0
+        while (qmat[j][0]!="0"):
+            if (qmat[j][1]!="0"):
+                v = v + qmat[j][i]
+                u = u + qmat[j][i]
+                uv = uv + qmat[j][1]*qmat[j][i]
+                j += 1
+            else:
+                j += 1
+        bagi = (u**0.5)*(v**0.5)
+        s = float(uv/bagi)
+        score.append[s]
+    return score
     
 with open('query.csv','w') as f:
     csv_writer = DictWriter(f, fieldnames=fieldnames)
     csv_writer.writeheader()
     #blom selesai
-q = input("Masukkan Pencarian:")
