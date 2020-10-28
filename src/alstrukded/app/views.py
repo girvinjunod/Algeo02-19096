@@ -26,7 +26,7 @@ class MyView(BaseView):
     def method3(self, param1):
         # do something with param1
         # and render template with param
-        param1 = 'Goodbye %s' % (param1)
+        param1 = 'Aplikasi ini dibuat oleh %s' % (param1)
         self.update_redirect()
         return self.render_template('method3.html',
                             param1 = param1)
@@ -34,4 +34,4 @@ class MyView(BaseView):
 
 appbuilder.add_view(MyView, "Method1", category='My View')
 appbuilder.add_link("Method2", href='/myview/method2/john', category='My View')
-appbuilder.add_link("Method3", href='/myview/method3/john', category='My View')
+appbuilder.add_link("About Us", href='/myview/method3/john', category='My View')
