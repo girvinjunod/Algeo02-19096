@@ -1,32 +1,22 @@
 from nltk.corpus import stopwords 
 from nltk.tokenize import word_tokenize 
 from csv import DictWriter
+from pathlib import Path
 import numpy as np
 import os 
-"""
-fieldname = ['Word','Q','D1','D2','D3','D4','D5'
-    ,'D6','D7','D8','D9','D10','D11','D12','D13','D14','D15','D16','D17','D18',
-    'D19','D20','D21','D22','D23','D24','D25']
-"""
-example_sent = "This is a sample sentence, showing off the stop words filtration."
-path_to_folder = "./test"
-fieldnames, kalimat = read_file(path_to_folder)
-query = input("Masukkan Pencarian:")
-q = clean_document(query)
-score = []
 
 def read_file(path_to_folder):
     kal = []
     num = 0
+    fieldname = ['Word','Q']
     for i in os.listdir(path_to_folder): 
         if i.endswith('.txt'): 
-            fieldname = ['Word','Q']
             fieldname.append(i)
-            f = open(i,'r')
+            f = open(i)
             a = f.read()
             kal.append(a)
             f.close()
-        num += 1
+            num += 1
     return fieldname, kal, num
 
 def clean_document(example_sent):
@@ -65,21 +55,23 @@ def query_table (query, kalimat, num):
                 d += 1
                 qmat[j][i] = str(d)
                 found = True
-    for i in range(query):
-        while ((n[j]!="0") and (foundq == False)):
-            if (qmat[j][0] == n[j]):
-                a = int(qmat[j][1])
+    
+    for l in range(len(query)):
+        p = 0
+        while ((qmat[p][0]!="0") and (foundq == False)):
+            if (qmat[p][0] == query[l]):
+                a = int(qmat[l][1])
                 a += 1
-                qmat[j][1] = str(a)
+                qmat[p][1] = str(a)
                 foundq = True
             else:
-                j += 1
-            if (foundq == False):
-                q[j][0] = n[j]
-                d = int(qmat[j][1])
-                d += 1
-                qmat[j][1] = str(a)
-                foundq = True
+                p +=1
+        if (foundq == False):
+            qmat[p][0] = query[l]
+            d = int(qmat[p][1])
+            d += 1
+            qmat[p][1] = str(a)
+            foundq = True
     return qmat
 
 def similar(qmat,num):
@@ -100,8 +92,29 @@ def similar(qmat,num):
         s = float(uv/bagi)
         score.append[s]
     return score
-    
+
+"""
+fieldname = ['Word','Q','D1','D2','D3','D4','D5'
+    ,'D6','D7','D8','D9','D10','D11','D12','D13','D14','D15','D16','D17','D18',
+    'D19','D20','D21','D22','D23','D24','D25']
+"""
+example_sent = "This is a sample sentence, showing off the stop words filtration."
+path = '/../test/'
+fieldnames, kalimat, num = read_file(path)
+query = input("Masukkan Pencarian:")
+q = clean_document(query)
+print(q)
+print(len(q))
+score = []
+
+read_file(path)
+hmat = [["0" for i in range (num)] for j in range (10000)]
+hmat = query_table(q, kalimat, num)
+print(similar(hmat,num))
+
+"""
 with open('query.csv','w') as f:
     csv_writer = DictWriter(f, fieldnames=fieldnames)
     csv_writer.writeheader()
     #blom selesai
+"""
