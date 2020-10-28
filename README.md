@@ -23,6 +23,7 @@ Add more general information about project. What the purpose of the project is? 
 * Tech 3 - version 3.0
 
 ## Setup
+run flask.py
 Describe how to install / setup your local environement / add link to demo version.
 
 ## Code Examples
