@@ -1,5 +1,5 @@
-# Project Name
-> Tubes 2 Aljabar Geometri
+# Tubes 2 Aljabar Geometri
+> by Alstrukded
 
 ## Table of contents
 * [General info](#general-info)
@@ -18,7 +18,7 @@ Add more general information about project. What the purpose of the project is? 
 ![Example screenshot](./img/screenshot.png)
 
 ## Technologies
-* Tech 1 - version 1.0
+* Python - version 3.8
 * Tech 2 - version 2.0
 * Tech 3 - version 3.0
 
@@ -40,8 +40,7 @@ To-do list:
 * Wow improvement to be done 2
 
 ## Status
-Project is: _in progress_, _finished_, _no longer continue_ and why?
-
+Project is: _in progress_
 ## Inspiration
 Add here credits. Project inspired by..., based on...
 
