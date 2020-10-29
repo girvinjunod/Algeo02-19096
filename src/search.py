@@ -3,20 +3,25 @@ from nltk.tokenize import word_tokenize
 from csv import DictWriter
 from pathlib import Path
 import numpy as np
-import os 
+import os
+import glob
+import errno
 
 def read_file(path_to_folder):
     kal = []
-    num = 0
+    num = 2
     fieldname = ['Word','Q']
-    for i in os.listdir(path_to_folder): 
-        if i.endswith('.txt'): 
-            fieldname.append(i)
-            f = open(i)
-            a = f.read()
-            kal.append(a)
-            f.close()
-            num += 1
+    files = glob.glob(path_to_folder)
+    for name in files:
+        fieldname.append(name)
+        try:
+            with open(name) as f:
+                for line in f:
+                    kal.append(line)
+        except IOError as exc: #Not sure what error this is
+            if exc.errno != errno.EISDIR:
+                raise
+        num += 1
     return fieldname, kal, num
 
 def clean_document(example_sent):
@@ -31,17 +36,18 @@ def clean_document(example_sent):
     b = filter #kata setelah difilter
     return b
 
-def query_table (query, kalimat, num):
+def query_table (kalimat, num, qmat):
     #input query & kalimat yang telah di clean
-    n = ["0" for k in range (num)]
+    n = ["0" for i in range (num)]
+    # n berguna untuk menampung kalimat dokumen yang sudah di clean
     found = False
-    foundq = False
-    qmat = [["0" for j in range (10000)] for i in range (num)]
     for i in range (2,num):
         j = 0
         n = clean_document(kalimat[i])
-        while ((j < n) and (found == False)):
-            while ((n[j]!="0") and (found == False)):
+        print(n)
+        print ("panjang kalimat" + str(len(n)))
+        while ((j < len(n)) and (found == False)):
+            while ((qmat[j][0]!="0") and (found == False)):
                 if (qmat[j][0] == n[j]):
                     a = int(qmat[j][i])
                     a += 1
@@ -49,28 +55,34 @@ def query_table (query, kalimat, num):
                     found = True
                 else:
                     j += 1
-            if (found == False):
-                q[j][0] = n[j]
-                d = int(qmat[j][i])
-                d += 1
-                qmat[j][i] = str(d)
-                found = True
-    
-    for l in range(len(query)):
+        if (found == False):
+            q[j][0] = n[j]
+            d = int(qmat[j][i])
+            d += 1
+            qmat[j][i] = str(d)
+            found = True
+    return qmat
+
+def query_table_short(query_a, qmat_a, num):
+    foundq = False
+    query = np.array(query_a)
+    qmat = np.array(qmat_a)
+    x = len(query)
+    for l in range(x):
         p = 0
         while ((qmat[p][0]!="0") and (foundq == False)):
             if (qmat[p][0] == query[l]):
-                a = int(qmat[l][1])
+                a = int(qmat[p][1])
                 a += 1
                 qmat[p][1] = str(a)
                 foundq = True
             else:
-                p +=1
+                p += 1
         if (foundq == False):
             qmat[p][0] = query[l]
             d = int(qmat[p][1])
             d += 1
-            qmat[p][1] = str(a)
+            qmat[p][1] = str(d)
             foundq = True
     return qmat
 
@@ -99,8 +111,10 @@ fieldname = ['Word','Q','D1','D2','D3','D4','D5'
     'D19','D20','D21','D22','D23','D24','D25']
 """
 example_sent = "This is a sample sentence, showing off the stop words filtration."
-path = '/../test/'
+path = 'D:/git/Algeo02-19096/test/*.txt'
 fieldnames, kalimat, num = read_file(path)
+print(fieldnames)
+print(num)
 query = input("Masukkan Pencarian:")
 q = clean_document(query)
 print(q)
@@ -108,9 +122,11 @@ print(len(q))
 score = []
 
 read_file(path)
-hmat = [["0" for i in range (num)] for j in range (10000)]
-hmat = query_table(q, kalimat, num)
-print(similar(hmat,num))
+hmat = [["0" for i in range (num)] for j in range (100)]
+qmat = query_table(kalimat, num, hmat)
+print(hmat[0:5])
+jmat = query_table_short(q,qmat,num)
+#print(similar(hmat,num))
 
 """
 with open('query.csv','w') as f:
