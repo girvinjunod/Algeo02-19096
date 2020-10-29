@@ -1,9 +1,3 @@
-import re
-import string
-import requests
-import numpy as np
-import pandas as pd
-from bs4 import BeautifulSoup
 from flask import Flask, render_template, flash, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 import os
@@ -12,8 +6,7 @@ import urllib.request
  
 app = Flask(__name__)
  
-UPLOAD_FOLDER = 'os.path.join(path,test)'
-path = os.getcwdb()
+UPLOAD_FOLDER = '../test'
 app.secret_key = "Cairocoders-Ednalan"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
