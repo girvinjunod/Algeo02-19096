@@ -16,8 +16,8 @@ def read_file(path_to_folder):
         fieldname.append(name)
         try:
             with open(name) as f:
-                for line in f:
-                    kal.append(line)
+                temp = f.read().splitlines()
+                kal.append(temp)
         except IOError as exc: #Not sure what error this is
             if exc.errno != errno.EISDIR:
                 raise
@@ -36,25 +36,34 @@ def clean_document(example_sent):
     b = filter #kata setelah difilter
     return b
 
-def query_table (kalimat, num, qmat):
+def query_table (kalimat, num):
+    qmat = [["0" for i in range (num)] for j in range (10000)]
     #input query & kalimat yang telah di clean
     n = ["0" for i in range (num)]
+    print(num)
     # n berguna untuk menampung kalimat dokumen yang sudah di clean
-    found = False
-    for i in range (2,num):
+    for i in range (2,num+1):
+        found = False
         j = 0
-        n = clean_document(kalimat[i])
-        print(n)
-        print ("panjang kalimat" + str(len(n)))
+        n = np.array(clean_document(kalimat[0][0]))
+        print(n[0:5])
+        print ("panjang kalimat " + str(len(n)))
         while ((j < len(n)) and (found == False)):
-            while ((qmat[j][0]!="0") and (found == False)):
-                if (qmat[j][0] == n[j]):
-                    a = int(qmat[j][i])
-                    a += 1
-                    qmat[j][i] = str(a)
-                    found = True
-                else:
-                    j += 1
+            if (i == 2):
+                qmat[j][0] = str(n[j])
+                d = int(qmat[j][i])
+                d += 1
+                qmat[j][i] = str(d)
+                found = True
+            else:
+                while ((qmat[j][0]!="0") and (found == False)):
+                    if (qmat[j][0] == n[j]):
+                        a = int(qmat[j][i])
+                        a += 1
+                        qmat[j][i] = str(a)
+                        found = True
+                    else:
+                        j = j+1
         if (found == False):
             q[j][0] = n[j]
             d = int(qmat[j][i])
@@ -90,7 +99,7 @@ def similar(qmat,num):
     for i in range (2,num):
         j = 0
         u = 0
-        uv = 0 #u.v 
+        uv = 0 #u.v
         v = 0
         while (qmat[j][0]!="0"):
             if (qmat[j][1]!="0"):
@@ -113,19 +122,17 @@ fieldname = ['Word','Q','D1','D2','D3','D4','D5'
 example_sent = "This is a sample sentence, showing off the stop words filtration."
 path = 'D:/git/Algeo02-19096/test/*.txt'
 fieldnames, kalimat, num = read_file(path)
-print(fieldnames)
-print(num)
 query = input("Masukkan Pencarian:")
 q = clean_document(query)
 print(q)
 print(len(q))
 score = []
 
+hmat= [["0" for i in range (num)] for j in range (10000)]
 read_file(path)
-hmat = [["0" for i in range (num)] for j in range (100)]
-qmat = query_table(kalimat, num, hmat)
+hmat = query_table(kalimat, num)
 print(hmat[0:5])
-jmat = query_table_short(q,qmat,num)
+jmat = query_table_short(q,hmat,num)
 #print(similar(hmat,num))
 
 """
