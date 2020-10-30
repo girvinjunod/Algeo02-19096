@@ -80,6 +80,7 @@ def upload_form():
     return render_template('upload.html')
 
 fieldnames, kalimat, num = read_file(path)
+print(kalimat)
 
 @app.route('/content')
 def content():
