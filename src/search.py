@@ -50,21 +50,21 @@ def query_table (query, kalimat, num):
         print(np.array(clean_document(str(kalimat[i-1]))))
         print(len(n))
         #print ("panjang kalimat " + str(len(n)))
+        if (i == 1):
+            kata.append(str(n[j]))
+            qmat[j][i] += 1
+        j += 1
         while (j < len(n)):
-            if (i == 1) and (j==0):
-                kata.append(str(n[j]))
-                qmat[j][i] += 1
-            else:
-                k = 0
-                while(k < len(kata)) and (found==False):
-                    if (kata[k]==n[j]):
-                        qmat[k][i] += 1
-                        found= True
-                    else:
-                        k += 1
-                if (found == False):
-                    kata.append(str(n[j]))
+            k = 0
+            while(k < len(kata)) and (found==False):
+                if (kata[k]==n[j]):
                     qmat[k][i] += 1
+                    found= True
+                else:
+                    k += 1
+            if (found == False):
+                kata.append(str(n[j]))
+                qmat[k][i] += 1
             j += 1
     
     q = clean_document(str(query))
