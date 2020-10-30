@@ -41,6 +41,7 @@ def query_table (query, kalimat, num):
     #input query & kalimat yang telah di clean
     n = [0 for i in range (num)]
     kata = []
+    found = False
     # n berguna untuk menampung kalimat dokumen yang sudah di clean
     for i in range (1,num-1):
         found = False
@@ -68,16 +69,19 @@ def query_table (query, kalimat, num):
             j += 1
     
     q = clean_document(str(query))
+    print(q)
+    print(len(q))
     while (j < len(q)):
         k=0
+        found = False
         while(k < len(kata)) and (found==False):
-            if (kata[k]==n[k]):
+            if (kata[k]==q[j]):
                 qmat[k][1] += 1
                 found= True
             else:
                 k += 1
         if (found == False):
-            kata.append(str(n[j]))
+            kata.append(str(q[j]))
             qmat[k][1] += 1
     return qmat, kata
 
