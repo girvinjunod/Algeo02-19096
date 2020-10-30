@@ -47,15 +47,16 @@ def query_table (query, kalimat, num):
         j = 0
         # j adalah pengatur kata berikut dalam 1 dokumen
         n = np.array(clean_document(str(kalimat[i-1])))
+        print(str(n))
         #print ("panjang kalimat " + str(len(n)))
         while (j < len(n)):
             if (i == 1) and (j==0):
-                kata.append((n[j]))
+                kata.append(str(n[j]))
                 qmat[j][i] += 1
             else:
                 k = 0
                 while(k < len(kata)) and (found==False):
-                    if (kata[k]==n[k]):
+                    if (kata[k]==n[j]):
                         qmat[j][i] += 1
                         found= True
                     else:
@@ -63,9 +64,9 @@ def query_table (query, kalimat, num):
                 if (found == False):
                     kata.append(str(n[j]))
                     print(kata)
-                    qmat[j][i] += 1
+                    qmat[k][i] += 1
             j += 1
-        print(kata)
+    print(kata)
     
     q = clean_document(str(query))
     while (j < len(q)):
@@ -79,7 +80,6 @@ def query_table (query, kalimat, num):
         if (found == False):
             kata.append(str(n[j]))
             qmat[j][1] += 1
-    print(kata)
     return qmat, kata
 
 def similar(qmat,num,kata):
