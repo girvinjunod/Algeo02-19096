@@ -11,6 +11,7 @@ from bs4 import BeautifulSoup
 from sklearn.feature_extraction.text import TfidfVectorizer
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
+path = "/test"
 def web_scraping():
     # Untuk mendapatkan link berita populer
     r = requests.get('https://kompas.com/')
@@ -68,4 +69,6 @@ def read_file(path_to_folder):
         num += 1
     return fieldname, kal, num
 
-docs = dok_bersih()
+fieldname, kalimat, num = read_file(path)
+kalimat = clean_dokumen(kalimat)
+print(kalimat)
