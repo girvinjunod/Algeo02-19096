@@ -7,21 +7,41 @@ from bs4 import BeautifulSoup
 from flask import Flask, render_template, flash, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 import os
+import glob
+import errno
 #import magic
 import urllib.request
  
 app = Flask(__name__)
  
 UPLOAD_FOLDER = '../test'
+path = 'D:/git/Algeo02-19096/test'
 app.secret_key = "Cairocoders-Ednalan"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
  
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+
+def read_file(path_to_folder):
+    kal = []
+    num = 2
+    fieldname = ['Word','Q']
+    files = glob.glob(path_to_folder)
+    for name in files:
+        fieldname.append(name)
+        try:
+            with open(name) as f:
+                temp = f.read().splitlines()
+                kal.append(temp)
+        except IOError as exc: #Not sure what error this is
+            if exc.errno != errno.EISDIR:
+                raise
+        num += 1
+    return fieldname, kal, num
 """
 def dok_bersih():
   # Untuk mendapatkan link berita populer
-  r = requests.get('127.0.0.1:5000/Content')
+  r = requests.get('127.0.0.1:5000/content')
   soup = BeautifulSoup(r.content, 'html.parser')
   link = []
   for i in soup.find('div', {'class':'most__wrap'}).find_all('a'):
@@ -49,15 +69,21 @@ def dok_bersih():
   return documents_clean
 """
 def allowed_file(filename):
-  return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
   
 @app.route('/')
 def home():
-  return render_template('index.html')
+    return render_template('index.html')
 
 @app.route('/upload')
 def upload_form():
-  return render_template('upload.html')
+    return render_template('upload.html')
+
+fieldnames, kalimat, num = read_file(path)
+
+@app.route('/content')
+def content():
+    return render_template('content.html', text=kalimat)
 
 @app.route('/upload/<filename>')
 def uploaded_file(filename):
@@ -65,18 +91,18 @@ def uploaded_file(filename):
 
 @app.route('/', methods=['POST'])
 def upload_file():
-  if request.method == 'POST':
+    if request.method == 'POST':
         # check if the post request has the files part
-    if 'files[]' not in request.files:
-      flash('No file part')
-      return redirect(request.url)
-    files = request.files.getlist('files[]')
-    for file in files:
-      if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        flash('File(s) successfully uploaded')
-  return redirect('/')
-   
+        if 'files[]' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        files = request.files.getlist('files[]')
+        for file in files:
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                flash('File(s) successfully uploaded')
+    return redirect('/')
+
 if __name__ == '__main__':
   app.run(debug=True)
