@@ -5,6 +5,8 @@ import string
 import requests
 import numpy as np
 import pandas as pd
+import glob
+import errno
 from bs4 import BeautifulSoup
 from sklearn.feature_extraction.text import TfidfVectorizer
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
@@ -48,5 +50,22 @@ def clean_dokumen(documents):
 
         documents_clean.append(document_test)
     return documents_clean
+
+def read_file(path_to_folder):
+    kal = []
+    num = 2
+    fieldname = ['Word','Q']
+    files = glob.glob(path_to_folder)
+    for name in files:
+        fieldname.append(name)
+        try:
+            with open(name) as f:
+                temp = f.read().splitlines()
+                kal.append(temp)
+        except IOError as exc: #Not sure what error this is
+            if exc.errno != errno.EISDIR:
+                raise
+        num += 1
+    return fieldname, kal, num
 
 docs = dok_bersih()
