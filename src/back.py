@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import re
 import string
 import requests
@@ -7,11 +6,16 @@ import numpy as np
 import pandas as pd
 import glob
 import errno
+from flask import Flask, render_template, flash, request, redirect, url_for, send_from_directory
+from werkzeug.utils import secure_filename
+import os
+import glob
+import errno
 from bs4 import BeautifulSoup
 from sklearn.feature_extraction.text import TfidfVectorizer
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
-path = "/test"
+path = "../test/*"
 def web_scraping():
     # Untuk mendapatkan link berita populer
     r = requests.get('https://kompas.com/')
@@ -40,14 +44,14 @@ def clean_dokumen(documents):
     stemmer = factory.create_stemmer()
     documents_clean = []
     for d in documents:
-        document_test = re.sub(r'[^\x00-\x7F]+', ' ', d) 
-        document_test = re.sub(r'@\w+', '', document_test)
+        document_test = re.sub(r'[^\x00-\x7F]+', ' ', str(d)) 
+        document_test = re.sub(r'@\w+', '', str(document_test))
         document_test = document_test.lower() #huruf kecil semua
         document_test = re.sub(r'[%s]' % re.escape(string.punctuation), ' ', document_test) 
         document_test = re.sub(r'[0-9]', '', document_test) #buang angka
         document_test = re.sub(r'\s{2,}', ' ', document_test)
         document_test = document_test.split() #split
-        document_test = stemmer.stem(document_test)
+        document_test = stemmer.stem(str(document_test))
 
         documents_clean.append(document_test)
     return documents_clean
@@ -60,7 +64,7 @@ def read_file(path_to_folder):
     for name in files:
         fieldname.append(name)
         try:
-            with open(name) as f:
+            with open(name,encoding='utf-8') as f:
                 temp = f.read().splitlines()
                 kal.append(temp)
         except IOError as exc: #Not sure what error this is
