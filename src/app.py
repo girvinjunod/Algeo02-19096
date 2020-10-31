@@ -41,6 +41,18 @@ def read_file(path_to_folder):
         num += 1
     return fieldname, kal, num
 
+def read_first(path_to_folder):
+    kal = []
+    nama = path_to_folder
+    try:
+        with open(nama, encoding='utf-8') as f:
+            temp = f.readline()
+            kal.append(temp)
+    except IOError as exc: #Not sure what error this is
+        if exc.errno != errno.EISDIR:
+            raise
+    return kal[0]
+
 """
 def dok_bersih():
   # Untuk mendapatkan link berita populer
@@ -169,10 +181,14 @@ def term_table(fieldname, qmat, kata, num):
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-  
-@app.route('/',methods=["POST", "GET"])
+
+@app.route('/')
+def menu_utama():
+    return render_template("menu_utama.html")
+
+@app.route('/local',methods=["POST", "GET"])
 def home():
-    if request.method == "POST":
+    if (request.method == "POST"):
 	    result = request.form["nm"]
 	    return redirect(url_for("result", res=result))
     else:
@@ -182,7 +198,7 @@ def home():
 def upload_form():
     return render_template('upload.html')
 
-@app.route("/<res>")
+@app.route("/search/<res>")
 def result(res):
     fieldnames, kalimat, num = read_file(path)
     hmat ,kata = query_table(res, kalimat, num)
@@ -192,16 +208,24 @@ def result(res):
         frek[(fieldnames[i])] = score[i-2]
     frek = sorted(frek.items(), key = lambda x:(x[1], x[0]), reverse=True)
     keys = []
+    judul = []
     for key in frek:
         keys.append(key)
+    for i in range (0,num-2):
+        base=os.path.basename(keys[i][0])
+        a = os.path.splitext(base)
+        judul.append((a)[0])
     return render_template('result.html', Text=res, file_1 = keys[0], file_2 = keys[1], 
-    file_3 = keys[2], file_4 = keys[3], file_5 = keys[4])
+    file_3 = keys[2], file_4 = keys[3], file_5 = keys[4], kal_1 = read_first(str(keys[0][0])),
+    kal_2 = read_first(str(keys[1][0])),kal_3 = read_first(str(keys[2][0])),kal_4 = read_first(str(keys[3][0]))
+    ,kal_5 = read_first(str(keys[4][0])), judul_1 = judul[0],judul_2=judul[1],judul_3=judul[2],judul_4=judul[3]
+    ,judul_5=judul[4])
 
 @app.route('/content')
 def content():
     return render_template('content.html', text=kalimat)
 
-@app.route('/upload/<filename>')
+@app.route('/test/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
 
@@ -218,7 +242,7 @@ def upload_file():
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 flash('File(s) successfully uploaded')
-    return redirect('/')
+    return redirect('/local')
 
 if __name__ == '__main__':
   app.run(debug=True)
