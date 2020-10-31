@@ -125,7 +125,7 @@ def term_table(fieldname, qmat, kata, num):
         for i in range(len(kata)):
             row=[]
             row += [kata[i]]
-            for j in range (0,num-1):
+            for j in range (0,num):
                 row += str(qmat[i][j])
             writer.writerow(row)
 
@@ -139,6 +139,7 @@ kata = []
 hmat= [["0" for i in range (num)] for j in range (10000)]
 read_file(path)
 hmat ,kata = query_table(query, kalimat, num)
+score = similar(hmat,num,kata)
 print(similar(hmat,num,kata))
 print(num)
 frek = {}
@@ -147,4 +148,6 @@ for i in range (2,num):
 print(frek)
 a = sorted(frek.items(), key = lambda kv:(kv[1], kv[0]), reverse=True)
 print(a)
-term_table(fieldnames, hmat, kata, num)
+
+df = pd.read_csv('query.csv')  
+df.head()

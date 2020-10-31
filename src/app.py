@@ -8,6 +8,7 @@ from flask import Flask, render_template, flash, request, redirect, url_for, sen
 from werkzeug.utils import secure_filename
 from nltk.corpus import stopwords 
 from nltk.tokenize import word_tokenize 
+from nltk.stem.porter import PorterStemmer
 import os
 import glob
 import errno
@@ -85,16 +86,22 @@ def dok_bersih():
 """
 
 def clean_document(example_sent):
-    stop_words = set(stopwords.words('english')) 
-    word_tokens = word_tokenize(example_sent) 
-    filter = [w for w in word_tokens if not w in stop_words] 
-    filter = [] 
-    for w in word_tokens: 
-        if w not in stop_words: 
-            filter.append(w) 
-    a = word_tokens #kata asli
-    b = filter #kata setelah difilter
-    return b
+    word_tokens = word_tokenize(example_sent)
+    # stemming of words
+    porter = PorterStemmer()
+    word_tokens = [porter.stem(word) for word in word_tokens]
+    # convert to lower case
+    word_tokens = [w.lower() for w in word_tokens]
+    # remove punctuation from each word
+    table = str.maketrans('', '', string.punctuation)
+    stripped = [w.translate(table) for w in word_tokens]
+    # remove remaining tokens that are not alphabetic
+    words = [word for word in stripped if word.isalpha()]
+    # filter out stop words
+    stop_words = set(stopwords.words('english'))
+    words = [w for w in words if not w in stop_words]
+    #blom dirapiin kodenya, masi bau2 copas :v
+    return words
 
 def query_table (query, kalimat, num):
     qmat = [[0 for i in range (num-1)] for j in range (10000)]
