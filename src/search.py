@@ -88,6 +88,7 @@ def query_table (query, kalimat, num):
     return qmat, kata
 
 def similar(qmat,num,kata):
+    score = []
     for i in range (1,num-1):
         j = 0
         u = 0
@@ -122,6 +123,7 @@ def term_table(fieldname, qmat, kata, num):
 
 path = '../test/*.txt'
 fieldnames, kalimat, num = read_file(path)
+#fieldnames = np.array(fieldnames)
 query = input("Masukkan Pencarian:")
 score = []
 kata = []
@@ -131,4 +133,10 @@ read_file(path)
 hmat ,kata = query_table(query, kalimat, num)
 print(similar(hmat,num,kata))
 print(num)
+frek = {}
+for i in range (2,num):
+    frek[(fieldnames[i])] = score[i-2]
+print(frek)
+a = sorted(frek.items(), key = lambda kv:(kv[1], kv[0]), reverse=True)
+print(a)
 term_table(fieldnames, hmat, kata, num)

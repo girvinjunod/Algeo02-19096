@@ -6,6 +6,8 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from flask import Flask, render_template, flash, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
+from nltk.corpus import stopwords 
+from nltk.tokenize import word_tokenize 
 import os
 import glob
 import errno
@@ -69,52 +71,6 @@ def dok_bersih():
       documents_clean.append(document_test)
   return documents_clean
 """
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-  
-@app.route('/',methods=["POST", "GET"])
-def home():
-    if request.method == "POST":
-	    result = request.form["nm"]
-	    return redirect(url_for("result", res=result))
-    else:
-	    return render_template("index.html")
-
-@app.route("/<res>")
-def result(res):
-    return render_template('result.html', Text=res)
-
-@app.route('/upload')
-def upload_form():
-    return render_template('upload.html')
-
-fieldnames, kalimat, num = read_file(path)
-hmat= [["0" for i in range (num)] for j in range (10000)]
-#hmat ,kata = query_table(result(res), kalimat, num)
-
-
-@app.route('/content')
-def content():
-    return render_template('content.html', text=kalimat)
-
-@app.route('/upload/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
-
-@app.route('/', methods=['POST'])
-def upload_file():
-    if request.method == 'POST':
-        # check if the post request has the files part
-        if 'files[]' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        files = request.files.getlist('files[]')
-        for file in files:
-            if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                flash('File(s) successfully uploaded')
-    return redirect('/')
 
 def clean_document(example_sent):
     stop_words = set(stopwords.words('english')) 
@@ -178,6 +134,7 @@ def query_table (query, kalimat, num):
     return qmat, kata
 
 def similar(qmat,num,kata):
+    score = []
     for i in range (1,num-1):
         j = 0
         u = 0
@@ -209,6 +166,59 @@ def term_table(fieldname, qmat, kata, num):
             for j in range (0,num-1):
                 row += str(qmat[i][j])
             writer.writerow(row)
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+  
+@app.route('/',methods=["POST", "GET"])
+def home():
+    if request.method == "POST":
+	    result = request.form["nm"]
+	    return redirect(url_for("result", res=result))
+    else:
+	    return render_template("index.html")
+
+@app.route('/upload')
+def upload_form():
+    return render_template('upload.html')
+
+@app.route("/<res>")
+def result(res):
+    fieldnames, kalimat, num = read_file(path)
+    hmat ,kata = query_table(res, kalimat, num)
+    score = similar(hmat,num,kata)
+    frek = {}
+    for i in range (2,num):
+        frek[(fieldnames[i])] = score[i-2]
+    frek = sorted(frek.items(), key = lambda x:(x[1], x[0]), reverse=True)
+    keys = []
+    for key in frek:
+        keys.append(key)
+    return render_template('result.html', Text=res, file_1 = keys[0], file_2 = keys[1], 
+    file_3 = keys[2], file_4 = keys[3], file_5 = keys[4])
+
+@app.route('/content')
+def content():
+    return render_template('content.html', text=kalimat)
+
+@app.route('/upload/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
+
+@app.route('/', methods=['POST'])
+def upload_file():
+    if request.method == 'POST':
+        # check if the post request has the files part
+        if 'files[]' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        files = request.files.getlist('files[]')
+        for file in files:
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                flash('File(s) successfully uploaded')
+    return redirect('/')
 
 if __name__ == '__main__':
   app.run(debug=True)
