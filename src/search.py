@@ -114,13 +114,13 @@ def term_table(fieldname, qmat, kata, num):
         writer = csv.writer(csv_file, delimiter=',')
         writer.writerow(fieldname)
         for i in range(len(kata)):
-            writer.writerow([kata[i],str(qmat[i][0:num])])
-"""
-fieldname = ['Word','Q','D1','D2','D3','D4','D5'
-    ,'D6','D7','D8','D9','D10','D11','D12','D13','D14','D15','D16','D17','D18',
-    'D19','D20','D21','D22','D23','D24','D25']
-"""
-path = 'D:/git/Algeo02-19096/test/*.txt'
+            row=[]
+            row += [kata[i]]
+            for j in range (0,num-1):
+                row += str(qmat[i][j])
+            writer.writerow(row)
+
+path = '../test/*.txt'
 fieldnames, kalimat, num = read_file(path)
 query = input("Masukkan Pencarian:")
 score = []
@@ -130,14 +130,5 @@ hmat= [["0" for i in range (num)] for j in range (10000)]
 read_file(path)
 hmat ,kata = query_table(query, kalimat, num)
 print(similar(hmat,num,kata))
-#hmat=np.insert(str(hmat), 0, kata, axis=1)
+print(num)
 term_table(fieldnames, hmat, kata, num)
-
-df = pd.read_csv("query.csv")
-df.head() 
-"""
-with open('query.csv','w') as f:
-    csv_writer = DictWriter(f, fieldnames=fieldnames)
-    csv_writer.writeheader()
-    #blom selesai
-"""

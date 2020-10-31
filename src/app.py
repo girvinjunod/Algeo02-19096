@@ -15,7 +15,7 @@ import urllib.request
 app = Flask(__name__)
  
 UPLOAD_FOLDER = '../test'
-path = 'D:/git/Algeo02-19096/test'
+path = '../test/*'
 app.secret_key = "Cairocoders-Ednalan"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
@@ -30,7 +30,7 @@ def read_file(path_to_folder):
     for name in files:
         fieldname.append(name)
         try:
-            with open(name) as f:
+            with open(name, encoding='utf-8') as f:
                 temp = f.read().splitlines()
                 kal.append(temp)
         except IOError as exc: #Not sure what error this is
@@ -38,6 +38,7 @@ def read_file(path_to_folder):
                 raise
         num += 1
     return fieldname, kal, num
+
 """
 def dok_bersih():
   # Untuk mendapatkan link berita populer
