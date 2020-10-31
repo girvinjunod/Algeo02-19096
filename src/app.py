@@ -72,9 +72,17 @@ def dok_bersih():
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
   
-@app.route('/')
+@app.route('/',methods=["POST", "GET"])
 def home():
-    return render_template('index.html')
+    if request.method == "POST":
+	    result = request.form["nm"]
+	    return redirect(url_for("result", res=result))
+    else:
+	    return render_template("index.html")
+
+@app.route("/<res>")
+def result(res):
+    return f"<h1>{result}</h1>"
 
 @app.route('/upload')
 def upload_form():
