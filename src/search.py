@@ -2,10 +2,12 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize 
 from csv import DictWriter
 from pathlib import Path
+import pandas as pd
 import numpy as np
 import os
 import glob
 import errno
+import csv
 
 def read_file(path_to_folder):
     kal = []
@@ -48,41 +50,41 @@ def query_table (query, kalimat, num):
         j = 0
         # j adalah pengatur kata berikut dalam 1 dokumen
         n = np.array(clean_document(str(kalimat[i-1])))
-        print(np.array(clean_document(str(kalimat[i-1]))))
-        print(len(n))
         #print ("panjang kalimat " + str(len(n)))
         if (i == 1):
             kata.append(str(n[j]))
             qmat[j][i] += 1
-        j += 1
-        while (j < len(n)):
-            k = 0
-            while(k < len(kata)) and (found==False):
-                if (kata[k]==n[j]):
-                    qmat[k][i] += 1
-                    found= True
-                else:
-                    k += 1
-            if (found == False):
-                kata.append(str(n[j]))
-                qmat[k][i] += 1
             j += 1
-    
+        else:
+            while (j < len(n)):
+                found = False
+                k = 0
+                while(k < len(kata)) and (found==False):
+                    if (kata[k]==n[j]):
+                        qmat[k][i] += 1
+                        found = True
+                    else:
+                        k += 1
+                #print("k adalah" + str(k))
+                if (found == False):
+                    kata.append(str(n[j]))
+                    qmat[k][i] += 1
+                j += 1
+    j = 0
     q = clean_document(str(query))
-    print(q)
-    print(len(q))
     while (j < len(q)):
         k=0
         found = False
         while(k < len(kata)) and (found==False):
             if (kata[k]==q[j]):
-                qmat[k][1] += 1
+                qmat[k][0] += 1
                 found= True
             else:
                 k += 1
         if (found == False):
             kata.append(str(q[j]))
-            qmat[k][1] += 1
+            qmat[k][0] += 1
+        j += 1
     return qmat, kata
 
 def similar(qmat,num,kata):
@@ -94,17 +96,25 @@ def similar(qmat,num,kata):
         while (j < len(kata)):
             if (qmat[j][0]!=0):
                 v = v + qmat[j][i]
-                u = u + qmat[j][i]
-                uv += qmat[j][0]*qmat[j][i]
+                u = u + qmat[j][0]
+                uv += u*v
                 j += 1
             else:
                 j += 1
         bagi = (u**0.5)*(v**0.5)
-        print(bagi)
-        s = float(uv/bagi)
-        score.append[s]
+        if (bagi != 0):
+            s = uv/bagi
+            score.append(s)
+        else:
+            score.append(int(0))
     return score
 
+def term_table(fieldname, qmat, kata, num):
+    with open("query.csv", mode='w',newline='', encoding='utf-8') as csv_file:
+        writer = csv.writer(csv_file, delimiter=',')
+        writer.writerow(fieldname)
+        for i in range(len(kata)):
+            writer.writerow([kata[i],str(qmat[i][0:num])])
 """
 fieldname = ['Word','Q','D1','D2','D3','D4','D5'
     ,'D6','D7','D8','D9','D10','D11','D12','D13','D14','D15','D16','D17','D18',
@@ -119,10 +129,12 @@ kata = []
 hmat= [["0" for i in range (num)] for j in range (10000)]
 read_file(path)
 hmat ,kata = query_table(query, kalimat, num)
-print(hmat[0:50])
-print(kata)
 print(similar(hmat,num,kata))
+#hmat=np.insert(str(hmat), 0, kata, axis=1)
+term_table(fieldnames, hmat, kata, num)
 
+df = pd.read_csv("query.csv")
+df.head() 
 """
 with open('query.csv','w') as f:
     csv_writer = DictWriter(f, fieldnames=fieldnames)
