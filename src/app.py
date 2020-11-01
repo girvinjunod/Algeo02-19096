@@ -94,21 +94,15 @@ def web_bersih(filename):
 
 
 def clean_document(example_sent):
-    word_tokens = word_tokenize(example_sent)
-    # stemming of words
-    porter = PorterStemmer()
-    word_tokens = [porter.stem(word) for word in word_tokens]
-    # convert to lower case
-    word_tokens = [w.lower() for w in word_tokens]
-    # remove punctuation from each word
-    table = str.maketrans('', '', string.punctuation)
-    stripped = [w.translate(table) for w in word_tokens]
-    # remove remaining tokens that are not alphabetic
-    words = [word for word in stripped if word.isalpha()]
-    # filter out stop words
     stop_words = set(stopwords.words('english'))
-    words = [w for w in words if not w in stop_words]
-    #blom dirapiin kodenya, masi bau2 copas :v
+    porter = PorterStemmer()
+    word_tokens = word_tokenize(example_sent) #dibuat ke token
+    word_tokens = [porter.stem(w) for w in word_tokens] #distem menggunakan porterstemmer dri nltk
+    word_tokens = [w.lower() for w in word_tokens] #dibuat ke huruf kecil semua
+    punc = str.maketrans('', '', string.punctuation)
+    word_tokens = [w.translate(punc) for w in word_tokens] #menghilangkan punctuations
+    word_tokens = [w for w in word_tokens if w.isalpha()] #filter jadi alphabet aja
+    words = [w for w in word_tokens if not w in stop_words] #filter stopwords
     return words
 
 def query_table (query, kalimat, num):
