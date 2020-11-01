@@ -32,13 +32,22 @@ def read_file(path_to_folder):
     files = glob.glob(path_to_folder)
     for name in files:
         fieldname.append(name)
-        try:
-            with open(name, encoding='utf-8') as f:
-                temp = f.read().splitlines()
-                kal.append(temp)
-        except IOError as exc: #Not sure what error this is
-            if exc.errno != errno.EISDIR:
-                raise
+        if (name.endswith('.txt')):
+            try:
+                with open(name, encoding='utf-8') as f:
+                    temp = f.read().splitlines()
+                    kal.append(temp)
+            except IOError as exc: #Not sure what error this is
+                if exc.errno != errno.EISDIR:
+                    raise
+        elif (name.endswith('.html')):
+            try:
+                with open(name, encoding='utf-8') as f:
+                    temp = f.read().splitlines()
+                    kal.append(temp)
+            except IOError as exc: #Not sure what error this is
+                if exc.errno != errno.EISDIR:
+                    raise
         num += 1
     return fieldname, kal, num
 
@@ -54,8 +63,8 @@ def read_first(path_to_folder):
             raise
     return kal[0]
 
-"""
-def dok_bersih():
+
+def web_bersih():
   # Untuk mendapatkan link berita populer
   r = requests.get('127.0.0.1:5000/content')
   soup = BeautifulSoup(r.content, 'html.parser')
@@ -83,7 +92,7 @@ def dok_bersih():
       document_test = re.sub(r'\s{2,}', ' ', document_test)
       documents_clean.append(document_test)
   return documents_clean
-"""
+
 
 def clean_document(example_sent):
     word_tokens = word_tokenize(example_sent)
