@@ -43,7 +43,7 @@ def read_file(path_to_folder):
         elif (name.endswith('.html')):
             try:
                 with open(name, encoding='utf-8') as f:
-                    temp = f.read().splitlines()
+                    temp = web_bersih(name)
                     kal.append(temp)
             except IOError as exc: #Not sure what error this is
                 if exc.errno != errno.EISDIR:
@@ -63,14 +63,13 @@ def read_first(path_to_folder):
             raise
     return kal[0]
 
-
-def web_bersih():
+def web_bersih(filename):
   # Untuk mendapatkan link berita populer
-  r = requests.get('127.0.0.1:5000/content')
+  r = requests.get('127.0.0.1:5000/test/<filename>')
   soup = BeautifulSoup(r.content, 'html.parser')
   link = []
   for i in soup.find('div', {'class':'most__wrap'}).find_all('a'):
-      i['href'] = i['href'] + '?page=all'
+      #i['href'] = i['href'] + '?page=all'
       link.append(i['href'])
   # Retrieve Paragraphs
   documents = []

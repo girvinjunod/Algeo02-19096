@@ -18,15 +18,53 @@ def read_file(path_to_folder):
     files = glob.glob(path_to_folder)
     for name in files:
         fieldname.append(name)
-        try:
-            with open(name, encoding='utf-8') as f:
-                temp = f.read().splitlines()
-                kal.append(temp)
-        except IOError as exc: #Not sure what error this is
-            if exc.errno != errno.EISDIR:
-                raise
+        if (name.endswith('.txt')):
+            try:
+                with open(name, encoding='utf-8') as f:
+                    temp = f.read().splitlines()
+                    kal.append(temp)
+            except IOError as exc: #Not sure what error this is
+                if exc.errno != errno.EISDIR:
+                    raise
+        elif (name.endswith('.html')):
+            try:
+                with open(name, encoding='utf-8') as f:
+                    temp = web_bersih(name)
+                    kal.append(temp)
+            except IOError as exc: #Not sure what error this is
+                if exc.errno != errno.EISDIR:
+                    raise
         num += 1
     return fieldname, kal, num
+
+def web_bersih(filename):
+  # Untuk mendapatkan link berita populer
+  r = requests.get('127.0.0.1:5000/test/<filename>')
+  soup = BeautifulSoup(r.content, 'html.parser')
+  link = []
+  for i in soup.find('div', {'class':'most__wrap'}).find_all('a'):
+      #i['href'] = i['href'] + '?page=all'
+      link.append(i['href'])
+  # Retrieve Paragraphs
+  documents = []
+  for i in link:
+      r = requests.get(i)
+      soup = BeautifulSoup(r.content, 'html.parser')
+      sen = []
+      for i in soup.find('div', {'class':'read__content'}).find_all('p'):
+          sen.append(i.text)
+      documents.append(' '.join(sen))
+  # Clean Paragraphs
+  documents_clean = []
+  for d in documents:
+      document_test = re.sub(r'[^\x00-\x7F]+', ' ', d)
+      document_test = re.sub(r'@\w+', '', document_test)
+      document_test = document_test.lower()
+      document_test = re.sub(r'[%s]' % re.escape(string.punctuation), ' ', document_test)
+      document_test = re.sub(r'[0-9]', '', document_test)
+      document_test = re.sub(r'\s{2,}', ' ', document_test)
+      documents_clean.append(document_test)
+  return documents_clean
 
 def clean_document(example_sent):
     word_tokens = word_tokenize(example_sent)
@@ -129,7 +167,7 @@ def term_table(fieldname, qmat, kata, num):
                 row += str(qmat[i][j])
             writer.writerow(row)
 
-path = '../test/*.txt'
+path = '../test/*'
 fieldnames, kalimat, num = read_file(path)
 #fieldnames = np.array(fieldnames)
 query = input("Masukkan Pencarian:")
@@ -137,7 +175,7 @@ score = []
 kata = []
 
 hmat= [["0" for i in range (num)] for j in range (10000)]
-read_file(path)
+print(kalimat)
 hmat ,kata = query_table(query, kalimat, num)
 score = similar(hmat,num,kata)
 print(similar(hmat,num,kata))
