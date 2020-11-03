@@ -30,7 +30,7 @@ ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 def read_file(path_to_folder):
     kal = []
     num = 2
-    fieldname = ['Word','Q']
+    fieldname = ['Word','Query']
     files = glob.glob(path_to_folder)
     for name in files:
         fieldname.append(name)
@@ -110,7 +110,6 @@ def clean_document(example_sent):
 def query_table (query, kalimat, num):
     qmat = [[0 for i in range (num-1)] for j in range (10000)]
     #input query & kalimat yang telah di clean
-    n = [0 for i in range (num)]
     kata = []
     found = False
     # n berguna untuk menampung kalimat dokumen yang sudah di clean
@@ -120,25 +119,20 @@ def query_table (query, kalimat, num):
         # j adalah pengatur kata berikut dalam 1 dokumen
         n = np.array(clean_document(str(kalimat[i-1])))
         #print ("panjang kalimat " + str(len(n)))
-        if (i == 1):
-            kata.append(str(n[j]))
-            qmat[j][i] += 1
-            j += 1
-        else:
-            while (j < len(n)):
-                found = False
-                k = 0
-                while(k < len(kata)) and (found==False):
-                    if (kata[k]==n[j]):
-                        qmat[k][i] += 1
-                        found = True
-                    else:
-                        k += 1
-                #print("k adalah" + str(k))
-                if (found == False):
-                    kata.append(str(n[j]))
+        while (j < len(n)):
+            found = False
+            k = 0
+            while(k < len(kata)) and (found==False):
+                if (kata[k]==n[j]):
                     qmat[k][i] += 1
-                j += 1
+                    found = True
+                else:
+                    k += 1
+            #print("k adalah" + str(k))
+            if (found == False):
+                kata.append(str(n[j]))
+                qmat[k][i] += 1
+            j += 1
     j = 0
     q = clean_document(str(query))
     while (j < len(q)):
@@ -215,11 +209,16 @@ def result(res):
     hmat ,kata = query_table(res, kalimat, num)
     score = similar(hmat,num,kata)
     frek = {}
+    judul_tabel=['Word','Query']
+    for i in range (2,num):
+        base=os.path.basename(fieldnames[i])
+        a = os.path.splitext(base)
+        judul_tabel.append((a)[0])
     for i in range (2,num):
         frek[(fieldnames[i])] = score[i-2]
     frek = sorted(frek.items(), key = lambda x:(x[1], x[0]), reverse=True)
     keys = []
-    judul = ["Word","Query"]
+    judul = []
     read = []
     for key in frek:
         keys.append(key)
@@ -228,7 +227,7 @@ def result(res):
         a = os.path.splitext(base)
         judul.append((a)[0])
         read.append(read_first(str(keys[i][0])))
-    term_table(judul, hmat, kata, num)
+    term_table(judul_tabel, hmat, kata, num)
     return render_template('result.html', Text=res, file=keys, judul = judul, kal = read, num = num-2)
 
 @app.route('/table')
@@ -236,7 +235,6 @@ def table():
     df = pd.read_csv("query.csv")
     return render_template('termtable.html', data=df.to_html())
     
-
 @app.route('/test/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],filename)

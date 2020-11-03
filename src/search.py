@@ -82,7 +82,7 @@ def clean_document(example_sent):
 def query_table (query, kalimat, num):
     qmat = [[0 for i in range (num-1)] for j in range (10000)]
     #input query & kalimat yang telah di clean
-    n = [0 for i in range (num)]
+    print(kalimat[0])
     kata = []
     found = False
     # n berguna untuk menampung kalimat dokumen yang sudah di clean
@@ -92,25 +92,21 @@ def query_table (query, kalimat, num):
         # j adalah pengatur kata berikut dalam 1 dokumen
         n = np.array(clean_document(str(kalimat[i-1])))
         #print ("panjang kalimat " + str(len(n)))
-        if (i == 1):
-            kata.append(str(n[j]))
-            qmat[j][i] += 1
-            j += 1
-        else:
-            while (j < len(n)):
-                found = False
-                k = 0
-                while(k < len(kata)) and (found==False):
-                    if (kata[k]==n[j]):
-                        qmat[k][i] += 1
-                        found = True
-                    else:
-                        k += 1
-                #print("k adalah" + str(k))
-                if (found == False):
-                    kata.append(str(n[j]))
+        while (j < len(n)):
+            found = False
+            k = 0
+            while(k < len(kata)) and (found==False):
+                if (kata[k]==n[j]):
                     qmat[k][i] += 1
-                j += 1
+                    found = True
+                else:
+                    k += 1
+            #print("k adalah" + str(k))
+            if (found == False):
+                print(str(n[j]))
+                kata.append(str(n[j]))
+                qmat[k][i] += 1
+            j += 1
     j = 0
     q = clean_document(str(query))
     while (j < len(q)):
