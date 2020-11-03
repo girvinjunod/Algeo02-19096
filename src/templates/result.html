@@ -3,30 +3,13 @@
 {% block content %}
 <h1>Search Result for: {{Text}}</h1>
 
-<div><a href="{{file_1[0]}}">{{judul_1}}</a></div>
-<div>{{file_1[0]}}</div>
-<div>Nilai Similaritas: {{file_1[1]}}</div>
-<div>{{kal_1}}...</div>
-<p></p>
-<div><a href="{{file_2[0]}}">{{judul_2}}</a></div>
-<div>{{file_2[0]}}</div>
-<div>Nilai Similaritas: {{file_2[1]}}</div>
-<div>{{kal_2}}...</div>
-<p></p>
-<div><a href="{{file_3[0]}}">{{judul_3}}</a></div>
-<div>{{file_3[0]}}</div>
-<div>Nilai Similaritas: {{file_3[1]}}</div>
-<div>{{kal_3}}...</div>
-<p></p>
-<div><a href="{{file_4[0]}}">{{judul_4}}</a></div>
-<div>{{file_4[0]}}</div>
-<div>Nilai Similaritas: {{file_4[1]}}</div>
-<div>{{kal_4}}...</div>
-<p></p>
-<div><a href="{{file_5[0]}}">{{judul_5}}</a></div>
-<div>{{file_5[0]}}></div>
-<div>Nilai Similaritas: {{file_5[1]}}</div>
-<div>{{kal_5}}...</div>
-<p></p>
+{% for i in range (5) %}
+    <div><a href="{{file[i][0]}}">{{judul[i]}}</a></div>
+    <div>{{file[i][0]}}</div>
+    <div>Nilai Similaritas: {{file[i][1]}}</div>
+    <div>{{kal[i]}}...</div>
+    <p></p>
+{% endfor %}
+
 <p>Untuk Melakukan Pencarian lagi, kembali ke Home</p>
 {% endblock %}

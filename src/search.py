@@ -34,6 +34,7 @@ def read_file(path_to_folder):
             except IOError as exc: #Not sure what error this is
                 if exc.errno != errno.EISDIR:
                     raise
+            print(kal)
         num += 1
     return fieldname, kal, num
 
@@ -169,7 +170,6 @@ score = []
 kata = []
 
 hmat= [["0" for i in range (num)] for j in range (10000)]
-print(kalimat)
 hmat ,kata = query_table(query, kalimat, num)
 score = similar(hmat,num,kata)
 print(similar(hmat,num,kata))

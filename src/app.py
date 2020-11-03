@@ -3,6 +3,7 @@ import string
 import requests
 import numpy as np
 import pandas as pd
+from csv import DictWriter
 from bs4 import BeautifulSoup
 from flask import Flask, render_template, flash, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
@@ -218,17 +219,15 @@ def result(res):
     frek = sorted(frek.items(), key = lambda x:(x[1], x[0]), reverse=True)
     keys = []
     judul = []
+    read = []
     for key in frek:
         keys.append(key)
     for i in range (0,num-2):
         base=os.path.basename(keys[i][0])
         a = os.path.splitext(base)
         judul.append((a)[0])
-    return render_template('result.html', Text=res, file_1 = keys[0], file_2 = keys[1], 
-    file_3 = keys[2], file_4 = keys[3], file_5 = keys[4], kal_1 = read_first(str(keys[0][0])),
-    kal_2 = read_first(str(keys[1][0])),kal_3 = read_first(str(keys[2][0])),kal_4 = read_first(str(keys[3][0]))
-    ,kal_5 = read_first(str(keys[4][0])), judul_1 = judul[0],judul_2=judul[1],judul_3=judul[2],judul_4=judul[3]
-    ,judul_5=judul[4])
+        read.append(read_first(str(keys[i][0])))
+    return render_template('result.html', Text=res, file=keys, judul = judul, kal = read)
 
 @app.route('/content')
 def content():
