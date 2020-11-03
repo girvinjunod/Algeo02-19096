@@ -158,8 +158,8 @@ def term_table(fieldname, qmat, kata, num):
         for i in range(len(kata)):
             row=[]
             row += [kata[i]]
-            for j in range (0,num):
-                row += str(qmat[i][j])
+            for j in range (num-1):
+                row += [str(qmat[i][j])]
             writer.writerow(row)
 
 path = '../test/*'
@@ -180,6 +180,4 @@ for i in range (2,num):
 print(frek)
 a = sorted(frek.items(), key = lambda kv:(kv[1], kv[0]), reverse=True)
 print(a)
-
-df = pd.read_csv('query.csv')
-df.head()
+term_table(fieldnames, hmat, kata, num)

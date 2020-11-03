@@ -4,6 +4,7 @@ import requests
 import numpy as np
 import pandas as pd
 from csv import DictWriter
+import csv
 from bs4 import BeautifulSoup
 from flask import Flask, render_template, flash, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
@@ -185,8 +186,8 @@ def term_table(fieldname, qmat, kata, num):
         for i in range(len(kata)):
             row=[]
             row += [kata[i]]
-            for j in range (0,num-1):
-                row += str(qmat[i][j])
+            for j in range (num-1):
+                row += [str(qmat[i][j])]
             writer.writerow(row)
 
 def allowed_file(filename):
@@ -218,7 +219,7 @@ def result(res):
         frek[(fieldnames[i])] = score[i-2]
     frek = sorted(frek.items(), key = lambda x:(x[1], x[0]), reverse=True)
     keys = []
-    judul = []
+    judul = ["Word","Query"]
     read = []
     for key in frek:
         keys.append(key)
@@ -227,11 +228,14 @@ def result(res):
         a = os.path.splitext(base)
         judul.append((a)[0])
         read.append(read_first(str(keys[i][0])))
+    term_table(judul, hmat, kata, num)
     return render_template('result.html', Text=res, file=keys, judul = judul, kal = read, num = num-2)
 
-@app.route('/content')
-def content():
-    return render_template('content.html', text=kalimat)
+@app.route('/table')
+def table():
+    df = pd.read_csv("query.csv")
+    return render_template('termtable.html', data=df.to_html())
+    
 
 @app.route('/test/<filename>')
 def uploaded_file(filename):
