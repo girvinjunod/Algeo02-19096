@@ -163,10 +163,10 @@ def similar(qmat,num,kata):
         uv = 0 #u.v
         v = 0
         while (j < len(kata)):
+            v += (qmat[j][i])**2
             if (qmat[j][0]!=0):
-                v = v + qmat[j][i]
-                u = u + qmat[j][0]
-                uv += u*v
+                u += (qmat[j][0])**2
+                uv += qmat[j][0]*qmat[j][i]
                 j += 1
             else:
                 j += 1
@@ -227,7 +227,7 @@ def result(res):
         a = os.path.splitext(base)
         judul.append((a)[0])
         read.append(read_first(str(keys[i][0])))
-    return render_template('result.html', Text=res, file=keys, judul = judul, kal = read)
+    return render_template('result.html', Text=res, file=keys, judul = judul, kal = read, num = num-2)
 
 @app.route('/content')
 def content():

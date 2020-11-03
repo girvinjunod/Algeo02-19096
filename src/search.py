@@ -137,9 +137,9 @@ def similar(qmat,num,kata):
         v = 0
         while (j < len(kata)):
             if (qmat[j][0]!=0):
-                v = v + qmat[j][i]
-                u = u + qmat[j][0]
-                uv += u*v
+                v += (qmat[j][i])**2
+                u += (qmat[j][0])**2
+                uv += qmat[j][0]*qmat[j][i]
                 j += 1
             else:
                 j += 1

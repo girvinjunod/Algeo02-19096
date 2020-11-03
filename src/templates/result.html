@@ -3,7 +3,7 @@
 {% block content %}
 <h1>Search Result for: {{Text}}</h1>
 
-{% for i in range (5) %}
+{% for i in range (num) %}
     <div><a href="{{file[i][0]}}">{{judul[i]}}</a></div>
     <div>{{file[i][0]}}</div>
     <div>Nilai Similaritas: {{file[i][1]}}</div>
@@ -11,5 +11,6 @@
     <p></p>
 {% endfor %}
 
-<p>Untuk Melakukan Pencarian lagi, kembali ke Home</p>
+<p>Untuk Melakukan Pencarian lagi, kembali ke <div><a href="{{url_for('home')}}">Home</a></div></p>
+
 {% endblock %}
