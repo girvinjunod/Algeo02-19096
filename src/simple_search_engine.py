@@ -36,7 +36,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-def dok_bersih():
+def retrieve_docs_and_clean():
   # Untuk mendapatkan link berita populer
   r = requests.get('https://bola.kompas.com/')
   soup = BeautifulSoup(r.content, 'html.parser')
@@ -70,8 +70,7 @@ def dok_bersih():
 
   return documents_clean
 
-docs = dok_bersih()
-print(docs)
+docs = retrieve_docs_and_clean()
 
 # Create Term-Document Matrix with TF-IDF weighting
 vectorizer = TfidfVectorizer()
@@ -82,7 +81,7 @@ df = pd.DataFrame(X.T.toarray(), index=vectorizer.get_feature_names())
 print(df.head())
 print(df.shape)
 
-docs = dok_bersih()
+docs = retrieve_docs_and_clean()
 # Create Term-Document Matrix with TF-IDF weighting
 vectorizer = TfidfVectorizer()
 X = vectorizer.fit_transform(docs)
@@ -107,6 +106,7 @@ def get_similar_articles(q, df):
       print("Nilai Similaritas:", v)
       print(docs[k])
       print()
+
 
 q1 = 'barcelona'
 q2 = 'gareth bale'
