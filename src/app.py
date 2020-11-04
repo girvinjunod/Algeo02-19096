@@ -231,7 +231,7 @@ def webresult(res):
         base=os.path.basename(keys[i][0])
         a = os.path.splitext(base)
         judul.append((a)[0])
-        read.append(kalimat[i])
+        read.append(kalimat[i][0:150])
     term_table(judul_tabel, hmat, kata, num)
     return render_template('result.html', Text=res, file=keys, judul = judul, kal = read, num = num-2)
 
