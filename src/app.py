@@ -192,6 +192,10 @@ def allowed_file(filename):
 def menu_utama():
     return render_template("menu_utama.html")
 
+@app.route("/data/about_us")
+def about_us():
+    return render_template("aboutus.html")
+
 @app.route('/local',methods=["POST", "GET"])
 def home():
     if (request.method == "POST"):
@@ -233,7 +237,7 @@ def webresult(res):
         judul.append((a)[0])
         read.append(kalimat[i][0:150])
     term_table(judul_tabel, hmat, kata, num)
-    return render_template('result.html', Text=res, file=keys, judul = judul, kal = read, num = num-2)
+    return render_template('webresult.html', Text=res, file=keys, judul = judul, kal = read, num = num-2)
 
 @app.route('/upload')
 def upload_form():
