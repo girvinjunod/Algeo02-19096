@@ -1,3 +1,6 @@
+import re
+import string
+import requests
 from nltk.corpus import stopwords 
 from nltk.tokenize import word_tokenize 
 from csv import DictWriter
@@ -9,6 +12,7 @@ import glob
 import errno
 import csv
 from nltk.stem.porter import PorterStemmer
+from bs4 import BeautifulSoup
 import string
 
 def read_file(path_to_folder):
@@ -34,38 +38,43 @@ def read_file(path_to_folder):
             except IOError as exc: #Not sure what error this is
                 if exc.errno != errno.EISDIR:
                     raise
-            print(kal)
         num += 1
     return fieldname, kal, num
 
-def web_bersih(filename):
-  # Untuk mendapatkan link berita populer
-  r = requests.get('127.0.0.1:5000/test/<filename>')
-  soup = BeautifulSoup(r.content, 'html.parser')
-  link = []
-  for i in soup.find('div', {'class':'most__wrap'}).find_all('a'):
-      #i['href'] = i['href'] + '?page=all'
-      link.append(i['href'])
-  # Retrieve Paragraphs
-  documents = []
-  for i in link:
-      r = requests.get(i)
-      soup = BeautifulSoup(r.content, 'html.parser')
-      sen = []
-      for i in soup.find('div', {'class':'read__content'}).find_all('p'):
-          sen.append(i.text)
-      documents.append(' '.join(sen))
-  # Clean Paragraphs
-  documents_clean = []
-  for d in documents:
-      document_test = re.sub(r'[^\x00-\x7F]+', ' ', d)
-      document_test = re.sub(r'@\w+', '', document_test)
-      document_test = document_test.lower()
-      document_test = re.sub(r'[%s]' % re.escape(string.punctuation), ' ', document_test)
-      document_test = re.sub(r'[0-9]', '', document_test)
-      document_test = re.sub(r'\s{2,}', ' ', document_test)
-      documents_clean.append(document_test)
-  return documents_clean
+def read_web():
+    # Untuk mendapatkan link berita populer
+    r = requests.get('http://bola.kompas.com/')
+    soup = BeautifulSoup(r.content, 'html.parser')
+    link = []
+    for i in soup.find('div', {'class':'most__wrap'}).find_all('a'):
+        i['href'] = i['href'] + '?page=all'
+        link.append(i['href'])
+
+    # Retrieve Paragraphs
+    documents = []
+    num = 0
+    for i in link:
+        r = requests.get(i)
+        soup = BeautifulSoup(r.content, 'html.parser')
+
+        sen = []
+        for i in soup.find('div', {'class':'read__content'}).find_all('p'):
+            sen.append(i.text)
+        documents.append(' '.join(sen))
+        num += 1
+
+    # Clean Paragraphs
+    documents_clean = []
+    for d in documents:
+        document_test = re.sub(r'[^\x00-\x7F]+', ' ', d)
+        document_test = re.sub(r'@\w+', '', document_test)
+        document_test = document_test.lower()
+        document_test = re.sub(r'[%s]' % re.escape(string.punctuation), ' ', document_test)
+        document_test = re.sub(r'[0-9]', '', document_test)
+        document_test = re.sub(r'\s{2,}', ' ', document_test)
+        documents_clean.append(document_test)
+    
+    return documents_clean, link, num
 
 def clean_document(example_sent):
     stop_words = set(stopwords.words('english'))
@@ -82,7 +91,6 @@ def clean_document(example_sent):
 def query_table (query, kalimat, num):
     qmat = [[0 for i in range (num-1)] for j in range (10000)]
     #input query & kalimat yang telah di clean
-    print(kalimat[0])
     kata = []
     found = False
     # n berguna untuk menampung kalimat dokumen yang sudah di clean
@@ -103,7 +111,6 @@ def query_table (query, kalimat, num):
                     k += 1
             #print("k adalah" + str(k))
             if (found == False):
-                print(str(n[j]))
                 kata.append(str(n[j]))
                 qmat[k][i] += 1
             j += 1
@@ -161,19 +168,32 @@ def term_table(fieldname, qmat, kata, num):
 path = '../test/*'
 fieldnames, kalimat, num = read_file(path)
 #fieldnames = np.array(fieldnames)
-query = input("Masukkan Pencarian:")
+res = input("Masukkan Pencarian:")
 score = []
 kata = []
 
-hmat= [["0" for i in range (num)] for j in range (10000)]
-hmat ,kata = query_table(query, kalimat, num)
-score = similar(hmat,num,kata)
-print(similar(hmat,num,kata))
-print(num)
+link = []
+kalimat, link , num = read_web()
+hmat, kata = query_table(res, kalimat, num+2)
+score = similar(hmat, num+2, kata)
 frek = {}
-for i in range (2,num):
-    frek[(fieldnames[i])] = score[i-2]
+judul_tabel=['Word','Query']
+for i in range(num):
+    base=os.path.basename(link[i])
+    a = os.path.splitext(base)
+    judul_tabel.append((a)[0])
+for i in range (num):
+    frek[(link[i])] = score[i]
 print(frek)
-a = sorted(frek.items(), key = lambda kv:(kv[1], kv[0]), reverse=True)
-print(a)
-term_table(fieldnames, hmat, kata, num)
+print(num)
+frek = sorted(frek.items(), key = lambda x:(x[1], x[0]), reverse=True)
+keys = []
+judul = []
+read = []
+for key in frek:
+    keys.append(key)
+for i in range (num):
+    base=os.path.basename(keys[i][0])
+    a = os.path.splitext(base)
+    judul.append((a)[0])
+term_table(judul_tabel, hmat, kata, num)

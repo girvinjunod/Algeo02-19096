@@ -36,7 +36,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-def retrieve_docs_and_clean():
+def read_web():
   # Untuk mendapatkan link berita populer
   r = requests.get('https://bola.kompas.com/')
   soup = BeautifulSoup(r.content, 'html.parser')
@@ -48,6 +48,7 @@ def retrieve_docs_and_clean():
 
   # Retrieve Paragraphs
   documents = []
+  num = 0
   for i in link:
       r = requests.get(i)
       soup = BeautifulSoup(r.content, 'html.parser')
@@ -56,6 +57,7 @@ def retrieve_docs_and_clean():
       for i in soup.find('div', {'class':'read__content'}).find_all('p'):
           sen.append(i.text)
       documents.append(' '.join(sen))
+      num += 1
 
   # Clean Paragraphs
   documents_clean = []
@@ -68,10 +70,13 @@ def retrieve_docs_and_clean():
       document_test = re.sub(r'\s{2,}', ' ', document_test)
       documents_clean.append(document_test)
 
-  return documents_clean
+  return documents_clean, link, num
 
-docs = retrieve_docs_and_clean()
-
+docs, link , num= read_web()
+print(docs)
+print(link)
+print(num)
+"""
 # Create Term-Document Matrix with TF-IDF weighting
 vectorizer = TfidfVectorizer()
 X = vectorizer.fit_transform(docs)
@@ -117,3 +122,4 @@ print('-'*100)
 get_similar_articles(q2, df)
 print('-'*100)
 get_similar_articles(q3, df)
+"""

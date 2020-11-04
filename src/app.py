@@ -57,36 +57,6 @@ def read_first(path_to_folder):
             raise
     return kal[0]
 
-def web_bersih(filename):
-  # Untuk mendapatkan link berita populer
-  r = requests.get('https://bola.kompas.com/')
-  soup = BeautifulSoup(r.content, 'html.parser')
-  link = []
-  for i in soup.find('div', {'class':'most__wrap'}).find_all('a'):
-      i['href'] = i['href'] + '?page=all'
-      link.append(i['href'])
-  # Retrieve Paragraphs
-  documents = []
-  for i in link:
-      r = requests.get(i)
-      soup = BeautifulSoup(r.content, 'html.parser')
-      sen = []
-      for i in soup.find('div', {'class':'read__content'}).find_all('p'):
-          sen.append(i.text)
-      documents.append(' '.join(sen))
-  # Clean Paragraphs
-  documents_clean = []
-  for d in documents:
-      document_test = re.sub(r'[^\x00-\x7F]+', ' ', d)
-      document_test = re.sub(r'@\w+', '', document_test)
-      document_test = document_test.lower()
-      document_test = re.sub(r'[%s]' % re.escape(string.punctuation), ' ', document_test)
-      document_test = re.sub(r'[0-9]', '', document_test)
-      document_test = re.sub(r'\s{2,}', ' ', document_test)
-      documents_clean.append(document_test)
-  return documents_clean
-
-
 def clean_document(example_sent):
     stop_words = set(stopwords.words('english'))
     porter = PorterStemmer()
@@ -176,6 +146,45 @@ def term_table(fieldname, qmat, kata, num):
                 row += [str(qmat[i][j])]
             writer.writerow(row)
 
+def read_web():
+    # Untuk mendapatkan link berita populer
+    r = requests.get('http://bola.kompas.com/')
+    soup = BeautifulSoup(r.content, 'html.parser')
+    link = []
+    fieldname = ['Word', 'Query']
+    for i in soup.find('div', {'class':'most__wrap'}).find_all('a'):
+        i['href'] = i['href'] + '?page=all'
+        link.append(i['href'])
+        fieldname.append(i['href'])
+
+    # Retrieve Paragraphs
+    documents = []
+    
+    num = 2
+    for i in link:
+        r = requests.get(i)
+        soup = BeautifulSoup(r.content, 'html.parser')
+
+        sen = []
+        for i in soup.find('div', {'class':'read__content'}).find_all('p'):
+            sen.append(i.text)
+        documents.append(' '.join(sen))
+        num += 1
+
+    # Clean Paragraphs
+    documents_clean = []
+    for d in documents:
+        document_test = re.sub(r'[^\x00-\x7F]+', ' ', d)
+        document_test = re.sub(r'@\w+', '', document_test)
+        document_test = document_test.lower()
+        document_test = re.sub(r'[%s]' % re.escape(string.punctuation), ' ', document_test)
+        document_test = re.sub(r'[0-9]', '', document_test)
+        document_test = re.sub(r'\s{2,}', ' ', document_test)
+        documents_clean.append(document_test)
+    
+
+    return fieldname, documents_clean, num
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -190,6 +199,41 @@ def home():
 	    return redirect(url_for("result", res=result))
     else:
 	    return render_template("index.html")
+
+@app.route('/web',methods=["POST", "GET"])
+def webhome():
+    if (request.method == "POST"):
+	    result = request.form["nm"]
+	    return redirect(url_for("webresult", res=result))
+    else:
+	    return render_template("webindex.html")
+
+@app.route("/websearch/<res>")
+def webresult(res):
+    fieldnames, kalimat, num = read_web()
+    hmat ,kata = query_table(res, kalimat, num)
+    score = similar(hmat,num,kata)
+    frek = {}
+    judul_tabel=['Word','Query']
+    for i in range (2,num):
+        base=os.path.basename(fieldnames[i])
+        a = os.path.splitext(base)
+        judul_tabel.append((a)[0])
+    for i in range (2,num):
+        frek[(fieldnames[i])] = score[i-2]
+    frek = sorted(frek.items(), key = lambda x:(x[1], x[0]), reverse=True)
+    keys = []
+    judul = []
+    read = []
+    for key in frek:
+        keys.append(key)
+    for i in range (0,num-2):
+        base=os.path.basename(keys[i][0])
+        a = os.path.splitext(base)
+        judul.append((a)[0])
+        read.append(kalimat[i])
+    term_table(judul_tabel, hmat, kata, num)
+    return render_template('result.html', Text=res, file=keys, judul = judul, kal = read, num = num-2)
 
 @app.route('/upload')
 def upload_form():
