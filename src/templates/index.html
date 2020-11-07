@@ -2,11 +2,14 @@
 {% block title %}Home Page{% endblock %}
 {% block content %}
 <h1>{{Text}}</h1>
-<p>Welcome!!</p>
-
+<div style=" padding:50px; margin:5px;text-align:center">
+<h3>Welcome to AlstrukDED's Search Engine(?)!</h3>
+<br>
+	<p>insert logo</p>
 <form action="#" method="post">
-	<p>Insert Text to search:</p>
-	<p><input type="text" name="nm" /></p>
-	<p><input type="submit" value="Search"/></p>
+	<h6>Insert Text to search:</h6><br>
+	<p><input type="text" size = "100" name="nm" /></p>
+	<p><input type="image" src="{{url_for('static', filename='search.png')}}" alt="Submit" width="48" height="48" value="Search"/></p>
 </form>
+</div>
 {% endblock %}
