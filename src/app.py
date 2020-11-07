@@ -215,14 +215,17 @@ def menu_utama():
 @app.route("/data/about_us")
 def about_us():
     return render_template("aboutus.html")
+@app.route("/data/alstrukded.jpg")
+def gambar():
+    return render_template("alstrukded.jpg")
 
 @app.route('/local',methods=["POST", "GET"])
 def home():
     if (request.method == "POST"):
-	    result = request.form["nm"]
-	    return redirect(url_for("result", res=result))
+        result = request.form["nm"]
+        return redirect(url_for("result", res=result))
     else:
-	    return render_template("index.html")
+        return render_template("index.html")
 
 @app.route('/web',methods=["POST", "GET"])
 def webhome():
@@ -231,7 +234,7 @@ def webhome():
         kategori = request.form.get("kategori")
         return redirect(url_for("webresult", res=result, kat=kategori))
     else:
-	    return render_template("webindex.html")
+        return render_template("webindex.html")
 
 @app.route("/websearch/<kat>/<res>")
 def webresult(res,kat):
