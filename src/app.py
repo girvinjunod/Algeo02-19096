@@ -146,14 +146,34 @@ def term_table(fieldname, qmat, kata, num):
                 row += [str(qmat[i][j])]
             writer.writerow(row)
 
-def read_web():
+def read_web(kategori):
     # Untuk mendapatkan link berita populer
-    r = requests.get('http://bola.kompas.com/')
+    try:
+        if kategori == "bola":
+            r = requests.get('http://bola.kompas.com/')
+        elif kategori == "money":
+            r = requests.get('http://money.kompas.com/')
+        elif kategori == "tekno":
+            r = requests.get('http://tekno.kompas.com/')
+        elif kategori == "otomotif":
+            r = requests.get('http://otomotif.kompas.com/')
+        elif kategori == "lifestyle":
+            r = requests.get('http://lifestyle.kompas.com/')
+        elif kategori == "health":
+            r = requests.get('http://health.kompas.com/')
+        elif kategori == "properti":
+            r = requests.get('http://properti.kompas.com/')
+        elif kategori == "travel":
+            r = requests.get('http://travel.kompas.com/')
+        elif kategori == "edukasi":
+            r = requests.get('http://edukasi.kompas.com/')
+    except requests.exceptions.ConnectionError:
+        r.status_code = "Connection refused"
     soup = BeautifulSoup(r.content, 'html.parser')
     link = []
     fieldname = ['Word', 'Query']
     for i in soup.find('div', {'class':'most__wrap'}).find_all('a'):
-        i['href'] = i['href'] + '?page=all'
+        #i['href'] = i['href'] + '?page=all'
         link.append(i['href'])
         fieldname.append(i['href'])
 
@@ -207,14 +227,15 @@ def home():
 @app.route('/web',methods=["POST", "GET"])
 def webhome():
     if (request.method == "POST"):
-	    result = request.form["nm"]
-	    return redirect(url_for("webresult", res=result))
+        result = request.form["nm"]
+        kategori = request.form.get("kategori")
+        return redirect(url_for("webresult", res=result, kat=kategori))
     else:
 	    return render_template("webindex.html")
 
-@app.route("/websearch/<res>")
-def webresult(res):
-    fieldnames, kalimat, num = read_web()
+@app.route("/websearch/<kat>/<res>")
+def webresult(res,kat):
+    fieldnames, kalimat, num = read_web(kat)
     hmat ,kata = query_table(res, kalimat, num)
     score = similar(hmat,num,kata)
     frek = {}
