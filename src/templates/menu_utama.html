@@ -1,6 +1,24 @@
 {%extends "base_utama.html"%}
 {% block title %}Home Page AlstrukDED{% endblock %}
 {% block content %}
-<div><a href="{{url_for('home')}}">FILE LOKAL</a></div>
-<div><a href="{{url_for('webhome')}}">WEB SCRAPING</a></div>
+<div style=" padding:50px; margin:5px;text-align:center">
+    <br><br>
+<a href ="{{url_for('home')}}" style = "  background-color: blue;
+  color: white;
+  font-size:50px;
+  padding: 25px 25px;
+  width: 750px;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: 1px 1px black;
+  display: inline-block;">File Lokal</a> <br><br><br><br><br><br>
+<a href="{{url_for('webhome')}}" style = "  background-color: red;
+  font-size:50px;
+  padding: 25px 25px;
+  width: 750px;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: 1px 1px black;
+  color: white;
+  display: inline-block;">Web Scraping</a>
 {% endblock %}

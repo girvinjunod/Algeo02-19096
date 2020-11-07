@@ -215,9 +215,6 @@ def menu_utama():
 @app.route("/data/about_us")
 def about_us():
     return render_template("aboutus.html")
-@app.route("/data/alstrukded.jpg")
-def gambar():
-    return render_template("alstrukded.jpg")
 
 @app.route('/local',methods=["POST", "GET"])
 def home():
