@@ -25,7 +25,7 @@ app.secret_key = "Cairocoders-Ednalan"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
  
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_EXTENSIONS = set(['txt'])
 
 def read_file(path_to_folder):
     kal = []
@@ -50,12 +50,13 @@ def read_first(path_to_folder):
     nama = path_to_folder
     try:
         with open(nama, encoding='utf-8') as f:
-            temp = f.readline()
-            kal.append(temp)
+            temp = f.read()
+            while (temp != '.'):
+                kal.append(temp)
     except IOError as exc: #Not sure what error this is
         if exc.errno != errno.EISDIR:
             raise
-    return kal[0]
+    return kal
 
 def clean_document(example_sent):
     stop_words = set(stopwords.words('english'))
@@ -135,8 +136,8 @@ def similar(qmat,num,kata):
             score.append(int(0))
     return score
 
-def term_table(fieldname, qmat, kata, num):
-    with open("query.csv", mode='w',newline='', encoding='utf-8') as csv_file:
+def term_table(fieldname, qmat, kata, num, filename):
+    with open(filename, mode='w',newline='', encoding='utf-8') as csv_file:
         writer = csv.writer(csv_file, delimiter=',')
         writer.writerow(fieldname)
         for i in range(len(kata)):
@@ -235,6 +236,7 @@ def webhome():
 
 @app.route("/websearch/<kat>/<res>")
 def webresult(res,kat):
+    filename = "web_query.csv"
     fieldnames, kalimat, num = read_web(kat)
     hmat ,kata = query_table(res, kalimat, num)
     score = similar(hmat,num,kata)
@@ -257,7 +259,7 @@ def webresult(res,kat):
         a = os.path.splitext(base)
         judul.append((a)[0])
         read.append(kalimat[i][0:150])
-    term_table(judul_tabel, hmat, kata, num)
+    term_table(judul_tabel, hmat, kata, num, filename)
     return render_template('webresult.html', Text=res, file=keys, judul = judul, kal = read, num = num-2)
 
 @app.route('/upload')
@@ -266,6 +268,7 @@ def upload_form():
 
 @app.route("/search/<res>")
 def result(res):
+    filename = "query.csv"
     fieldnames, kalimat, num = read_file(path)
     hmat ,kata = query_table(res, kalimat, num)
     score = similar(hmat,num,kata)
@@ -288,13 +291,18 @@ def result(res):
         a = os.path.splitext(base)
         judul.append((a)[0])
         read.append(read_first(str(keys[i][0])))
-    term_table(judul_tabel, hmat, kata, num)
+    term_table(judul_tabel, hmat, kata, num, filename)
     return render_template('result.html', Text=res, file=keys, judul = judul, kal = read, num = num-2)
 
 @app.route('/table')
 def table():
     df = pd.read_csv("query.csv")
     return render_template('termtable.html', data=df.to_html())
+
+@app.route('/webtable')
+def webtable():
+    df = pd.read_csv("webquery.csv")
+    return render_template('webtermtable.html', data=df.to_html())
     
 @app.route('/test/<filename>')
 def uploaded_file(filename):
