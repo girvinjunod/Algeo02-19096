@@ -50,13 +50,12 @@ def read_first(path_to_folder):
     nama = path_to_folder
     try:
         with open(nama, encoding='utf-8') as f:
-            temp = f.read()
-            while (temp != '.'):
-                kal.append(temp)
+            temp = f.readline()
+            kal.append(temp)
     except IOError as exc: #Not sure what error this is
         if exc.errno != errno.EISDIR:
             raise
-    return kal
+    return kal[0][0:150]
 
 def clean_document(example_sent):
     stop_words = set(stopwords.words('english'))
@@ -236,7 +235,7 @@ def webhome():
 
 @app.route("/websearch/<kat>/<res>")
 def webresult(res,kat):
-    filename = "web_query.csv"
+    filename = "webquery.csv"
     fieldnames, kalimat, num = read_web(kat)
     hmat ,kata = query_table(res, kalimat, num)
     score = similar(hmat,num,kata)
