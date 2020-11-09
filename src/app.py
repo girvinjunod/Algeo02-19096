@@ -291,7 +291,7 @@ def result(res):
     fieldnames, kalimat, num = read_file(path)
     banyak_kal = banyak_kata(kalimat,num)
     hmat ,kata = query_table(res, kalimat, num)
-    score = similar(hmat,num,kata)
+    score , total_q = similar(hmat,num,kata)
     frek = {}
     judul_tabel=['Term','Query']
     for i in range (2,num):
@@ -305,6 +305,7 @@ def result(res):
     judul = []
     read = []
     banyak =[]
+    total_query = []
     for key in frek:
         keys.append(key)
     for i in range (0,num-2):
@@ -318,10 +319,11 @@ def result(res):
         while (j < num-2) and (found == False):
             if (keys[i][0]==fieldnames[j+2]):
                 banyak.append(banyak_kal[j])
+                total_query.append(total_q[j])
                 found = True
             j += 1
     term_table(judul_tabel, hmat, kata, num, filename)
-    return render_template('result.html', Text=res, file=keys, judul = judul, kal = read, num = num-2, banyak = banyak)
+    return render_template('result.html', Text=res, file=keys, judul = judul, kal = read, num = num-2, banyak = banyak, query = total_query)
 
 @app.route('/table')
 def table():
