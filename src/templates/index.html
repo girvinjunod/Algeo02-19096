@@ -1,13 +1,11 @@
 {%extends "base.html"%}
 {% block title %}Home Page{% endblock %}
 {% block content %}
-<h1>{{Text}}</h1>
-<div style=" padding:50px; margin:5px;text-align:center">
-<h3>Welcome to AlstrukDED's Search Engine(?)!</h3>
-<br>
-	<p>insert logo</p>
+<div style=" padding:30px; margin:5px;text-align:center">
+<h3>Welcome to AlstrukDED's Search Engine!</h3>
+	<img src="{{url_for('static', filename='logo.png')}}" style = "width: 50%; height: 50%;" alt="logo" />
 <form action="#" method="post">
-	<h6>Insert Text to search:</h6><br>
+	<p><b>Insert Text to search:</b></p>
 	<p><input type="text" size = "100" name="nm" /></p>
 	<p><input type="image" src="{{url_for('static', filename='search.png')}}" alt="Submit" width="48" height="48" value="Search"/></p>
 </form>
