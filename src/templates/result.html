@@ -1,20 +1,20 @@
 {%extends "base.html"%}
 {% block title %}AlstrukDED - {{Text}}{% endblock %}
 {% block content %}
-<div style=" padding:50px; margin:5px;text-align:left">
-<h3>Search Result for: {{Text}}</h3>
-    <h6>Untuk Melakukan Pencarian lagi, kembali ke <a href="{{url_for('home')}}">Home</a></h6>
+<div style=" padding:30px; margin:5px;text-align:left">
+<h1>Search Result for: {{Text}}</h1>
+    <h6>Untuk Melakukan Pencarian lagi, kembali ke <strong><a href="{{url_for('home')}}">Home</a></strong></h6>
 
 {% for i in range (num) %}
-    <div><a href="{{file[i][0]}}">{{judul[i]}}</a></div>
-    <div>{{file[i][0]}}</div>
-    <div>Jumlah Query yang Cocok Pada Website: {{query[i]}}</div>
-    <div>Jumlah Kata Pada Website: {{banyak[i]}}</div>
-    <div>Tingkat Kemiripan: {{file[i][1]}}</div>
-    <div>{{kal[i]}}...</div>
-    <p></p>
+    <strong><a href="{{file[i][0]}}">{{judul[i]}}</a></strong><br>
+    <div style = "color: #0B782F">{{file[i][0]}}</div>
+    <b>Jumlah Query yang Cocok Pada Website:</b> <span style = "color: #FF0000"><b>{{query[i]}}</b></span><br>
+    <b>Jumlah Kata Pada Website:</b><span style = "color: #FF0000"><b> {{banyak[i]}}</b></span><br>
+    <b>Tingkat Kemiripan:</b> <span style = "color: #FF0000"><b>{{file[i][1]}}</b></span><br>
+    {{kal[i]}}...
+    <br>
 {% endfor %}
 
 
-</div>
+</span>
 {% endblock %}
