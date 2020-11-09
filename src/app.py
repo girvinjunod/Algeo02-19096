@@ -30,7 +30,7 @@ ALLOWED_EXTENSIONS = set(['txt'])
 def read_file(path_to_folder):
     kal = []
     num = 2
-    fieldname = ['Word','Query']
+    fieldname = ['Term','Query']
     files = glob.glob(path_to_folder)
     for name in files:
         fieldname.append(name)
@@ -68,6 +68,13 @@ def clean_document(example_sent):
     word_tokens = [w for w in word_tokens if w.isalpha()] #filter jadi alphabet aja
     words = [w for w in word_tokens if not w in stop_words] #filter stopwords
     return words
+
+def banyak_kata(kalimat,num):
+    banyak = []
+    for i in range (1,num-1):
+        n = np.array(clean_document(str(kalimat[i-1])))
+        banyak.append(len(n))
+    return banyak
 
 def query_table (query, kalimat, num):
     qmat = [[0 for i in range (num-1)] for j in range (10000)]
@@ -114,26 +121,31 @@ def query_table (query, kalimat, num):
 
 def similar(qmat,num,kata):
     score = []
+    total_query=[]
     for i in range (1,num-1):
         j = 0
         u = 0
         uv = 0 #u.v
         v = 0
+        q = 0
         while (j < len(kata)):
             v += (qmat[j][i])**2
             if (qmat[j][0]!=0):
                 u += (qmat[j][0])**2
+                if (qmat[j][0]*qmat[j][i]!=0):
+                    q += qmat[j][i]
                 uv += qmat[j][0]*qmat[j][i]
                 j += 1
             else:
                 j += 1
         bagi = (u**0.5)*(v**0.5)
+        total_query.append(q)
         if (bagi != 0):
             s = uv/bagi
             score.append(s)
         else:
             score.append(int(0))
-    return score
+    return score, total_query
 
 def term_table(fieldname, qmat, kata, num, filename):
     with open(filename, mode='w',newline='', encoding='utf-8') as csv_file:
@@ -149,30 +161,27 @@ def term_table(fieldname, qmat, kata, num, filename):
 
 def read_web(kategori):
     # Untuk mendapatkan link berita populer
-    try:
-        if kategori == "bola":
-            r = requests.get('http://bola.kompas.com/')
-        elif kategori == "money":
-            r = requests.get('http://money.kompas.com/')
-        elif kategori == "tekno":
-            r = requests.get('http://tekno.kompas.com/')
-        elif kategori == "otomotif":
-            r = requests.get('http://otomotif.kompas.com/')
-        elif kategori == "lifestyle":
-            r = requests.get('http://lifestyle.kompas.com/')
-        elif kategori == "health":
-            r = requests.get('http://health.kompas.com/')
-        elif kategori == "properti":
-            r = requests.get('http://properti.kompas.com/')
-        elif kategori == "travel":
-            r = requests.get('http://travel.kompas.com/')
-        elif kategori == "edukasi":
-            r = requests.get('http://edukasi.kompas.com/')
-    except requests.exceptions.ConnectionError:
-        r.status_code = "Connection refused"
+    if kategori == "bola":
+        r = requests.get('http://bola.kompas.com/')
+    elif kategori == "money":
+        r = requests.get('http://money.kompas.com/')
+    elif kategori == "tekno":
+        r = requests.get('http://tekno.kompas.com/')
+    elif kategori == "otomotif":
+        r = requests.get('http://otomotif.kompas.com/')
+    elif kategori == "lifestyle":
+        r = requests.get('http://lifestyle.kompas.com/')
+    elif kategori == "health":
+        r = requests.get('http://health.kompas.com/')
+    elif kategori == "properti":
+        r = requests.get('http://properti.kompas.com/')
+    elif kategori == "travel":
+        r = requests.get('http://travel.kompas.com/')
+    elif kategori == "edukasi":
+        r = requests.get('http://edukasi.kompas.com/')
     soup = BeautifulSoup(r.content, 'html.parser')
     link = []
-    fieldname = ['Word', 'Query']
+    fieldname = ['Term', 'Query']
     for i in soup.find('div', {'class':'most__wrap'}).find_all('a'):
         #i['href'] = i['href'] + '?page=all'
         link.append(i['href'])
@@ -203,7 +212,6 @@ def read_web(kategori):
         document_test = re.sub(r'\s{2,}', ' ', document_test)
         documents_clean.append(document_test)
     
-
     return fieldname, documents_clean, num
 
 def allowed_file(filename):
@@ -238,10 +246,11 @@ def webhome():
 def webresult(res,kat):
     filename = "webquery.csv"
     fieldnames, kalimat, num = read_web(kat)
+    banyak_kal = banyak_kata(kalimat,num)
     hmat ,kata = query_table(res, kalimat, num)
-    score = similar(hmat,num,kata)
+    score , total_q= similar(hmat,num,kata)
     frek = {}
-    judul_tabel=['Word','Query']
+    judul_tabel=['Term','Query']
     for i in range (2,num):
         base=os.path.basename(fieldnames[i])
         a = os.path.splitext(base)
@@ -252,15 +261,25 @@ def webresult(res,kat):
     keys = []
     judul = []
     read = []
+    banyak = []
+    total_query = []
     for key in frek:
         keys.append(key)
     for i in range (0,num-2):
         base=os.path.basename(keys[i][0])
         a = os.path.splitext(base)
         judul.append((a)[0])
-        read.append(kalimat[i][0:150])
+        j = 0
+        found = False
+        while (j < num-2) and (found == False):
+            if (keys[i][0]==fieldnames[j+2]):
+                read.append(kalimat[j][0:150])
+                banyak.append(banyak_kal[j])
+                total_query.append(total_q[j])
+                found = True
+            j += 1
     term_table(judul_tabel, hmat, kata, num, filename)
-    return render_template('webresult.html', Text=res, file=keys, judul = judul, kal = read, num = num-2)
+    return render_template('webresult.html', Text=res, file=keys, judul = judul, kal = read, num = num-2, banyak = banyak, query = total_query)
 
 @app.route('/upload')
 def upload_form():
@@ -270,10 +289,11 @@ def upload_form():
 def result(res):
     filename = "query.csv"
     fieldnames, kalimat, num = read_file(path)
+    banyak_kal = banyak_kata(kalimat,num)
     hmat ,kata = query_table(res, kalimat, num)
     score = similar(hmat,num,kata)
     frek = {}
-    judul_tabel=['Word','Query']
+    judul_tabel=['Term','Query']
     for i in range (2,num):
         base=os.path.basename(fieldnames[i])
         a = os.path.splitext(base)
@@ -284,15 +304,24 @@ def result(res):
     keys = []
     judul = []
     read = []
+    banyak =[]
     for key in frek:
         keys.append(key)
     for i in range (0,num-2):
         base=os.path.basename(keys[i][0])
         a = os.path.splitext(base)
         judul.append((a)[0])
-        read.append(read_first(str(keys[i][0])))
+        kal = read_first(str(keys[i][0]))
+        read.append(kal)
+        j = 0
+        found = False
+        while (j < num-2) and (found == False):
+            if (keys[i][0]==fieldnames[j+2]):
+                banyak.append(banyak_kal[j])
+                found = True
+            j += 1
     term_table(judul_tabel, hmat, kata, num, filename)
-    return render_template('result.html', Text=res, file=keys, judul = judul, kal = read, num = num-2)
+    return render_template('result.html', Text=res, file=keys, judul = judul, kal = read, num = num-2, banyak = banyak)
 
 @app.route('/table')
 def table():

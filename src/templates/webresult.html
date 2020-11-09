@@ -6,8 +6,9 @@
 {% for i in range (num) %}
     <div><a href="{{file[i][0]}}">{{judul[i]}}</a></div>
     <div>{{file[i][0]}}</div>
-    <div>Jumlah kata: {{banyak[i]}}</div>
-    <div>Nilai Similaritas: {{file[i][1]}}</div>
+    <div>Jumlah Query yang Cocok Pada Website: {{query[i]}}</div>
+    <div>Jumlah Kata Pada Website: {{banyak[i]}}</div>
+    <div>Tingkat Kemiripan: {{file[i][1]}}</div>
     <div>{{kal[i]}}...</div>
     <p></p>
 {% endfor %}
