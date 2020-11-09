@@ -1,7 +1,9 @@
 {%extends "base.html"%}
 {% block title %}AlstrukDED - {{Text}}{% endblock %}
 {% block content %}
-<h1>Search Result for: {{Text}}</h1>
+<div style=" padding:50px; margin:5px;text-align:left">
+<h3>Search Result for: {{Text}}</h3>
+    <h6>Untuk Melakukan Pencarian lagi, kembali ke <a href="{{url_for('home')}}">Home</a></h6>
 
 {% for i in range (num) %}
     <div><a href="{{file[i][0]}}">{{judul[i]}}</a></div>
@@ -13,6 +15,6 @@
     <p></p>
 {% endfor %}
 
-<p>Untuk Melakukan Pencarian lagi, kembali ke <a href="{{url_for('home')}}">Home</a></p>
 
+</div>
 {% endblock %}
