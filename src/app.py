@@ -140,11 +140,12 @@ def term_table(fieldname, qmat, kata, num, filename):
         writer = csv.writer(csv_file, delimiter=',')
         writer.writerow(fieldname)
         for i in range(len(kata)):
-            row=[]
-            row += [kata[i]]
-            for j in range (num-1):
-                row += [str(qmat[i][j])]
-            writer.writerow(row)
+            if (qmat[i][0]!=0):
+                row=[]
+                row += [kata[i]]
+                for j in range (num-1):
+                    row += [str(qmat[i][j])]
+                writer.writerow(row)
 
 def read_web(kategori):
     # Untuk mendapatkan link berita populer
