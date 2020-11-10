@@ -1,22 +1,21 @@
-{%extends "base_utama.html"%}
+{%extends "base.html"%}
 {% block title %}AlstrukDED - Upload{% endblock %}
 {% block content %}
 <!DOCTYPE html>
 <html>
 <head>
- <title>AlstrukDED</title>
  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
  <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 </head>
 <div id="wrapper">
             <div id="page-wrapper">
-                <div class="row">
+                <div class="row" >
                     <div class="container">
                         <div id="identitycard" style="margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
                             <div class="panel panel-info">
                                 <div class="panel-heading">
-                                    <div class="panel-title">Select file(s) to upload</div>
+                                    <div class="panel-title" style = "text-align :center;">Select file(s) to upload</div>
                                 </div>
                                 <div class="panel-body">
         <p>
@@ -30,19 +29,17 @@
            {% endif %}
          {% endwith %}
         </p>
-                                    <div class="row">
-                                        <p style="padding: 8px;" class="text-center">File to upload .txt</p>
-                                    </div>
-                                    <div class="row" style="padding: 10px 15px 9px;">
+                                        <div style = "text-align:center; padding:8px">Files to upload (.txt)</div>
+                                    <div style="padding: 10px 80px 10px 80px; text-align:center;">
                                         <form method="post" action="/" enctype="multipart/form-data">
-                                            <div class="form-group"> 
-                                                <div class="row" style="margin-bottom: 20px;">
-                                                    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 col-md-offset-3 col-sm-offset-3 col-xs-offset-2"> 
-                                                        <input type="file" name="files[]" multiple="true" autocomplete="off" required> 
+                                            <div class="form-group">
+                                                <div class="row" style="margin-bottom:25px;">
+                                                    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-120 col-md-offset-2 col-sm-offset-3 col-xs-offset-2 col-lg-12-offset-2">
+                                                        <input type="file" name="files[]" multiple="true" autocomplete="off" required>
                                                     </div>
                                                 </div>
                                                 <div class="row text-center" style="padding-left: 20px;padding-right: 20px;">
-             <input type="submit" value="Submit" class="btn btn-lg btn-block btn-success" style="border-radius: 50px;background-color:hover: #35832f;">
+             <input type="submit" value="Submit" class="btn btn-lg btn-block btn-success" align= middle style="border-radius: 50px;background-color:hover: #35832f; text-align:center;">
             </div>                                                 
                                             </div>                                                                                          
                                         </form>
