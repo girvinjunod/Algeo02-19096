@@ -1,13 +1,10 @@
 {%extends "base.html"%}
 {% block title %}AlstrukDED - Upload{% endblock %}
-{% block content %}
-<!DOCTYPE html>
-<html>
-<head>
+
+{% block head%}
  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
- <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-</head>
+{%endblock%}
+{% block content %}
 <div id="wrapper">
             <div id="page-wrapper">
                 <div class="row" >
@@ -18,7 +15,7 @@
                                     <div class="panel-title" style = "text-align :center;">Select file(s) to upload</div>
                                 </div>
                                 <div class="panel-body">
-        <p>
+        <span style ="text-align:center">
          {% with messages = get_flashed_messages() %}
            {% if messages %}
           {% for message in messages %}
@@ -28,13 +25,14 @@
           {% endfor %}
            {% endif %}
          {% endwith %}
-        </p>
+                            </span>
+
                                         <div style = "text-align:center; padding:8px">Files to upload (.txt)</div>
                                     <div style="padding: 10px 80px 10px 80px; text-align:center;">
                                         <form method="post" action="/" enctype="multipart/form-data">
                                             <div class="form-group">
                                                 <div class="row" style="margin-bottom:25px;">
-                                                    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-120 col-md-offset-2 col-sm-offset-3 col-xs-offset-2 col-lg-12-offset-2">
+                                                    <div class=" col-md-offset-2 col-sm-offset-3 col-xs-offset-2 col-lg-12-offset-2">
                                                         <input type="file" name="files[]" multiple="true" autocomplete="off" required>
                                                     </div>
                                                 </div>
@@ -51,6 +49,4 @@
                 </div>
         </div>
 </div>
-</body>
-</html>
 {% endblock %}
