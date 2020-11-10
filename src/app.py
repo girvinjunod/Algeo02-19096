@@ -3,7 +3,6 @@ import string
 import requests
 import numpy as np
 import pandas as pd
-from csv import DictWriter
 import csv
 from bs4 import BeautifulSoup
 from flask import Flask, render_template, flash, request, redirect, url_for, send_from_directory
@@ -14,8 +13,6 @@ from nltk.stem.porter import PorterStemmer
 import os
 import glob
 import errno
-#import magic
-import urllib.request
  
 app = Flask(__name__)
  
