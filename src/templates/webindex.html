@@ -1,11 +1,11 @@
 {%extends "webbase.html"%}
 {% block title %}Home Web Page{% endblock %}
 {% block content %}
-<h1>{{Text}}</h1>
-<p>Welcome to AlstrukDED Web!!</p>
+<div style = "padding:10px; margin:50px; text-align:left">
+<h3>Welcome to AlstrukDED's Web Scrapping Search Engine!</h3>
 
 <form action="#" method="post">
-	<p>Choose Category:</p>
+	Choose Category:<br>
 	<input type="radio" id="bola" name="kategori" value="bola">
 	<label for="bola">Bola</label><br>
 	<input type="radio" id="money" name="kategori" value="money">
@@ -24,8 +24,9 @@
 	<label for="travel">Travel</label><br>
 	<input type="radio" id="edukasi" name="kategori" value="edukasi">
 	<label for="edukasi">Edukasi</label><br>
-	<p>Insert Text to search:</p>
-	<p><input type="text" name="nm" /></p>
+	<p><b>Insert text to search:</b></p>
+	<p><input type="text" size = "50" name="nm" /></p>
 	<p><input type="submit" value="Search"/></p>
 </form>
+	</div>
 {% endblock %}

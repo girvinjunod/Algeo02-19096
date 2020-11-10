@@ -1,5 +1,5 @@
 {%extends "base_utama.html"%}
-{% block title %}Home Page{% endblock %}
+{% block title %}About Us{% endblock %}
 {% block content %}
 <h1>{{Text}}</h1>
 <div style=" padding:50px; margin:5px;text-align:center">
@@ -11,11 +11,11 @@
     Mohon bantuan doanya atas nilai alstrukdat kami.</p>
     <h5>Kelompok kami terdiri dari 3 orang yaitu:</h5>
     <h6>Girvin Junod 13519096 </h6>
-    <p>insert funny self image here</p>
+    <img src="{{url_for('static', filename='girvin.jpg')}}" alt="girvinganteng" style = "width: 25%; heigth: 25%;" />
     <h6>David Owen Adiwiguna 13519169</h6>
     <img src="{{url_for('static', filename='davidowen.jpg')}}" alt="dapidganteng" style = "width: 25%; heigth: 25%;" />
     <h6>Mahacarry Leonard Matheus 13519215</h6>
-    <p>insert picture of superman</p>
+    <img src="{{url_for('static', filename='leo.jpg')}}" alt="leoganteng" style = "width: 25%; heigth: 25%;" />
     <br>
     <p>Status kami saat ini:</p>
     <img src="{{url_for('static', filename='meme.jpg')}}" style = "width: 25%; height: 25%;" alt="meme" />
