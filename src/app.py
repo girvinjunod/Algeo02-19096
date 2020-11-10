@@ -352,7 +352,7 @@ def upload_file():
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 flash('File(s) successfully uploaded')
-    return redirect('/local')
+    return redirect('/upload')
 
 if __name__ == '__main__':
   app.run(debug=True)
