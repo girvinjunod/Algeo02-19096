@@ -10,6 +10,7 @@ from werkzeug.utils import secure_filename
 from nltk.corpus import stopwords 
 from nltk.tokenize import word_tokenize 
 from nltk.stem.porter import PorterStemmer
+from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 import os
 import glob
 import errno
@@ -55,6 +56,9 @@ def read_first(path_to_folder):
     return kal[0][0:150]
 
 def clean_document(example_sent):
+    factory = StemmerFactory()
+    stemmer = factory.create_stemmer()
+    example_sent = stemmer.stem(example_sent)
     stop_words = set(stopwords.words('english'))
     porter = PorterStemmer()
     word_tokens = word_tokenize(example_sent) #dibuat ke token
@@ -207,6 +211,7 @@ def read_web(kategori):
         document_test = re.sub(r'[%s]' % re.escape(string.punctuation), ' ', document_test)
         document_test = re.sub(r'[0-9]', '', document_test)
         document_test = re.sub(r'\s{2,}', ' ', document_test)
+
         documents_clean.append(document_test)
     
     return fieldname, documents_clean, num
