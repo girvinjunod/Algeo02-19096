@@ -18,7 +18,7 @@ Project ini bisa mencari query dari file secara lokal, maupun dari web hasil dar
 * Python - version 3.8
 
 ## Setup
-# Instalasi Awal
+### Instalasi Awal
 * Pastikan python sudah terinstall di komputer anda.
 * Pastikan pip juga sudah terinstall di komputer anda.
 * Install beberapa pip berikut ini :
@@ -33,16 +33,16 @@ Project ini bisa mencari query dari file secara lokal, maupun dari web hasil dar
 9. pip install requests
 * Jalankan program di python dengan isi "import nltk" di line 1 dan "nltk.download()" di line 2 untuk menginstall nltk
 
-# Menjalankan Program
+### Menjalankan Program
 * Import file dengan menggunakan "git clone https://github.com/girvinjunod/Algeo02-19096" di gitbash 
 * Jalankan app.py dengan menggunakan command "python app.py" di command prompt.
 * Copy atau ketik ulang link yang dikeluarkan ke dalam browser anda.(http://127.0.0.1:5000/)
 
-# Search Engine Web
+### Search Engine Web
 * Untuk menggunakan pencarian web, tekan "WebScraping" dan memasukkan kagegori juga query
 * Term Table bisa diliat pada tab "Web Term Table"
 
-# Search Engine Lokal 
+### Search Engine Lokal 
 * Untuk mencari file di local, tekan "File Lokal" kemudian masukkan query yang ingin dicari
 * Untuk mengupload file dari lokal, bisa menekan tab "Upload" dan mengupload file dari komputer
 * Term Table bisa diliat pada tab "Term Table"
