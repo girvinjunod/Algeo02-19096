@@ -19,7 +19,7 @@ Project ini bisa mencari query dari file secara lokal, maupun dari web hasil dar
 
 ## Setup
 ### Instalasi Awal
-* Pastikan python sudah terinstall di komputer anda.
+* Pastikan python, sebaiknya python 3.8, sudah terinstall di komputer anda.
 * Pastikan pip juga sudah terinstall di komputer anda.
 * Install beberapa pip berikut ini :
 1. pip install sastrawi
@@ -31,7 +31,7 @@ Project ini bisa mencari query dari file secara lokal, maupun dari web hasil dar
 7. pip install glob2
 8. pip install Werkzeug
 9. pip install requests
-* Jalankan program di python dengan isi "import nltk" di line 1 dan "nltk.download()" di line 2 untuk menginstall nltk
+* Jalankan program di python dengan isi "import nltk" di line 1 dan "nltk.download()" di line 2 untuk menginstall nltk. Akan keluar window NLTK downloader, pilih download all.
 
 ### Menjalankan Program
 * Import file dengan menggunakan "git clone https://github.com/girvinjunod/Algeo02-19096" di gitbash 
@@ -39,11 +39,11 @@ Project ini bisa mencari query dari file secara lokal, maupun dari web hasil dar
 * Copy atau ketik ulang link yang dikeluarkan ke dalam browser anda.(http://127.0.0.1:5000/)
 
 ### Search Engine Web
-* Untuk menggunakan pencarian web, tekan "WebScraping" dan memasukkan kagegori juga query
+* Untuk menggunakan pencarian web, dari menu utama tekan "WebScraping" dan memasukkan kagegori juga query
 * Term Table bisa diliat pada tab "Web Term Table"
 
 ### Search Engine Lokal 
-* Untuk mencari file di local, tekan "File Lokal" kemudian masukkan query yang ingin dicari
+* Untuk mencari file di local, dari menu utama tekan "File Lokal" kemudian masukkan query yang ingin dicari
 * Untuk mengupload file dari lokal, bisa menekan tab "Upload" dan mengupload file dari komputer
 * Term Table bisa diliat pada tab "Term Table"
 
