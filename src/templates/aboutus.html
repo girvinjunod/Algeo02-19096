@@ -8,7 +8,8 @@
     dengan query yang dipakai untuk mencari.<br>
     Search Engine menggunakan algoritma yang menghitung tingkat kemiripan dari hasil-hasil pencarian dengan query, kemudian menampilkan hasil dengan tingkat kemiripan tertinggi terlebih dahulu.</P>
 <h1> How to Use </h1>
-        <p> Pastikan di komputer anda sudah terinstall python dan pip<br>
+        <h3> Setup Awal</h3>
+        <p>Pastikan di komputer anda sudah terinstall python dan pip<br>
         install pip berikut ini dengan mengunakan command "pip install ..." di command prompt<br>
         1. pip install sastrawi <br>
         2. pip install nltk <br>
@@ -19,8 +20,23 @@
         7. pip install glob2 <br>
         8. pip install Werkzeug <br>
         9. pip install requests <br>
+        Jalankan program di python dengan isi "import nltk" di line 1 dan <br>
+        "nltk.download()" di line 2 untuk menginstall nltk<br></p>
+
+        <h3> Menjalankan Program </h3>
+        <p>Import file dengan menggunakan "git clone https://github.com/girvinjunod/Algeo02-19096" di gitbash <br>
         Jalankan command prompt di dalam folder src, kemudian jalankan command "python app.py"<br>
-        Copy atau ketik ulang link yang dikeluarkan ke dalam browser anda.</p>
+        Copy atau ketik ulang link yang dikeluarkan ke dalam browser anda. (http://127.0.0.1:5000/)<br></p>
+
+        <h3> Search Engine Web</h3>
+        <p>Untuk menggunakan pencarian web, tekan "WebScraping" dan memasukkan kagegori juga query <br>
+        Term Table bisa diliat pada tab "Web Term Table"</p>
+
+        <h3> Search Engine Lokal </h3>
+        <p>Untuk mencari file di local, tekan "File Lokal" kemudian masukkan query yang ingin dicari<br>
+        Untuk mengupload file dari lokal, bisa menekan tab "Upload" dan mengupload file dari komputer<br>
+        Term Table bisa diliat pada tab "Term Table"</p>
+
 <h1> About Us </h1>
     <br>
     <img src="{{url_for('static', filename='alstrukded.jpg')}}" alt="AlstrukDED" />

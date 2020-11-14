@@ -3,24 +3,22 @@
 
 ## Table of contents
 * [General info](#general-info)
-* [Screenshots](#screenshots)
 * [Technologies](#technologies)
 * [Setup](#setup)
 * [Features](#features)
 * [Status](#status)
-* [Inspiration](#inspiration)
 * [Contact](#contact)
 
 ## General info
-Add more general information about project. What the purpose of the project is? Motivation?
-
-## Screenshots
-
+Project ini adalah Project membuat search engine yang menampilkan hasil berdasarkan persen similiaritas,
+hasil pencarian yang persen similiaritasnya paling tinggi akan ditampilkan di paling awal hasil pencarian.
+Project ini bisa mencari query dari file secara lokal, maupun dari web hasil dari webscrapping
 
 ## Technologies
 * Python - version 3.8
 
 ## Setup
+# Instalasi Awal
 * Pastikan python sudah terinstall di komputer anda.
 * Pastikan pip juga sudah terinstall di komputer anda.
 * Install beberapa pip berikut ini :
@@ -33,28 +31,35 @@ Add more general information about project. What the purpose of the project is? 
 7. pip install glob2
 8. pip install Werkzeug
 9. pip install requests
-* Jalankan app.py dengan menggunakan command "python app.py" di command prompt.
-* Copy atau ketik ulang link yang dikeluarkan ke dalam browser anda.
-* Upload file yang akan digunakan
-* Search file yang paling relevan dengan memasukan query
+* Jalankan program di python dengan isi "import nltk" di line 1 dan "nltk.download()" di line 2 untuk menginstall nltk
 
-## Code Examples
-Show examples of usage:
-`put-your-code-here`
+# Menjalankan Program
+* Import file dengan menggunakan "git clone https://github.com/girvinjunod/Algeo02-19096" di gitbash 
+* Jalankan app.py dengan menggunakan command "python app.py" di command prompt.
+* Copy atau ketik ulang link yang dikeluarkan ke dalam browser anda.(http://127.0.0.1:5000/)
+
+# Search Engine Web
+* Untuk menggunakan pencarian web, tekan "WebScraping" dan memasukkan kagegori juga query
+* Term Table bisa diliat pada tab "Web Term Table"
+
+# Search Engine Lokal 
+* Untuk mencari file di local, tekan "File Lokal" kemudian masukkan query yang ingin dicari
+* Untuk mengupload file dari lokal, bisa menekan tab "Upload" dan mengupload file dari komputer
+* Term Table bisa diliat pada tab "Term Table"
+
 
 ## Features
 List of features ready and TODOs for future development
 * Meng-upload file dari local files
-* Mencari hasil pencarian paling relevan dari file yang sudah diupload
-* Menunjukan persentase kemiripan semua file yang ada dengan query
+* Mencari hasil pencarian paling relevan dari local files yang sudah diupload
+* Mencari hasil pencarian paling relevan dari web yang ada
+* Menunjukan persentase kemiripan semua file yang ada dengan query yang dicari
 
 To-do list:
-* 
+* -
 
 ## Status
 Project is: _in progress_
-## Inspiration
-Add here credits. Project inspired by..., based on...
 
 ## Contact
 Created by AlstrukDED
