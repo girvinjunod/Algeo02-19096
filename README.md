@@ -15,16 +15,28 @@
 Add more general information about project. What the purpose of the project is? Motivation?
 
 ## Screenshots
-![Example screenshot](./img/screenshot.png)
+
 
 ## Technologies
 * Python - version 3.8
-* Tech 2 - version 2.0
-* Tech 3 - version 3.0
 
 ## Setup
-run flask.py
-Describe how to install / setup your local environement / add link to demo version.
+* Pastikan python sudah terinstall di komputer anda.
+* Pastikan pip juga sudah terinstall di komputer anda.
+* Install beberapa pip berikut ini :
+1. pip install sastrawi
+2. pip install nltk
+3. pip install flask
+4. pip install numpy
+5. pip install beautifulsoup4
+6. pip install pandas
+7. pip install glob2
+8. pip install Werkzeug
+9. pip install requests
+* Jalankan app.py dengan menggunakan command "python app.py" di command prompt.
+* Copy atau ketik ulang link yang dikeluarkan ke dalam browser anda.
+* Upload file yang akan digunakan
+* Search file yang paling relevan dengan memasukan query
 
 ## Code Examples
 Show examples of usage:
@@ -32,13 +44,12 @@ Show examples of usage:
 
 ## Features
 List of features ready and TODOs for future development
-* Awesome feature 1
-* Awesome feature 2
-* Awesome feature 3
+* Meng-upload file dari local files
+* Mencari hasil pencarian paling relevan dari file yang sudah diupload
+* Menunjukan persentase kemiripan semua file yang ada dengan query
 
 To-do list:
-* Wow improvement to be done 1
-* Wow improvement to be done 2
+* 
 
 ## Status
 Project is: _in progress_
@@ -46,4 +57,4 @@ Project is: _in progress_
 Add here credits. Project inspired by..., based on...
 
 ## Contact
-Created by [@flynerdpl](https://www.flynerd.pl/) - feel free to contact me!
+Created by AlstrukDED
