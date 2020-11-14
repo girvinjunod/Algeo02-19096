@@ -3,7 +3,7 @@
 {% block content %}
 <div style=" padding:35px; margin:5px;text-align: left; font-family: Arial, Helvetica, sans-serif;">
 <h1>Search Result for: <span style = "color: #FF0000"><strong>{{Text}}</strong></span></h1>
-<h6>Untuk melakukan pencarian lagi, kembali ke <strong><a href="{{url_for('home')}}">Home</a></strong></h6>
+<h6>Untuk melakukan pencarian lagi, kembali ke <strong><a href="{{url_for('webhome')}}">Home</a></strong></h6>
 {% for i in range (num) %}
     <strong><a href="{{file[i][0]}}">{{judul[i]}}</a></strong><br>
     <div style = "color: #0B782F">{{file[i][0]}}</div>
