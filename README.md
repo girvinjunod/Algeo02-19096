@@ -21,7 +21,8 @@ Project ini bisa mencari query dari file secara lokal, maupun dari web hasil dar
 ### Instalasi Awal
 * Pastikan python, sebaiknya python 3.8, sudah terinstall di komputer anda.
 * Pastikan pip juga sudah terinstall di komputer anda.
-* Install beberapa pip berikut ini :
+* Jika belum maka download dan install terlebih dahulu python 3.8 dan pip, biasanya pip sudah preinstalled dengan python tapi bisa tidak. Kalau tidak, bisa di download dan install sendiri.
+* Install beberapa library ini dengan command berikut di terminal python:
 1. pip install sastrawi
 2. pip install nltk
 3. pip install flask
@@ -38,15 +39,16 @@ Project ini bisa mencari query dari file secara lokal, maupun dari web hasil dar
 * Jalankan app.py dengan menggunakan command "python app.py" di command prompt.
 * Copy atau ketik ulang link yang dikeluarkan ke dalam browser anda.(http://127.0.0.1:5000/)
 
-### Search Engine Web
-* Untuk menggunakan pencarian web, dari menu utama tekan "WebScraping" dan memasukkan kagegori juga query
-* Term Table bisa diliat pada tab "Web Term Table"
-
 ### Search Engine Lokal 
 * Untuk mencari file di local, dari menu utama tekan "File Lokal" kemudian masukkan query yang ingin dicari
 * Untuk mengupload file dari lokal, bisa menekan tab "Upload" dan mengupload file dari komputer
 * Term Table bisa diliat pada tab "Term Table"
+* Untuk mencari lagi, klik tab search atau klik link home dari laman search result
 
+### Search Engine Web
+* Untuk menggunakan pencarian web, dari menu utama tekan "WebScraping" dan memasukkan kagegori juga query
+* Term Table bisa diliat pada tab "Web Term Table"
+* Untuk mencari lagi, klik tab search atau klik link home dari laman search result
 
 ## Features
 List of features ready and TODOs for future development
