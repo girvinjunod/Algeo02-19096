@@ -61,7 +61,7 @@ To-do list:
 * -
 
 ## Status
-Project is: _in progress_
+Project is: _Finished_
 
 ## Contact
 Created by AlstrukDED
