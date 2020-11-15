@@ -59,7 +59,7 @@ def read_first(path_to_folder):
     except IOError as exc: #Not sure what error this is
         if exc.errno != errno.EISDIR:
             raise
-    return kal[0][0:150]
+    return kal[0]
 
 def clean_document(example_sent):
     stop_words = set(stopwords.words('english'))
