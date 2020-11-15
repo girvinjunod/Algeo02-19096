@@ -76,9 +76,7 @@ def webclean_document(example_sent):
     factory = StemmerFactory()
     stemmer = factory.create_stemmer()
     example_sent = stemmer.stem(example_sent)
-    porter = PorterStemmer()
     word_tokens = word_tokenize(example_sent) #dibuat ke token
-    word_tokens = [porter.stem(w) for w in word_tokens] #distem menggunakan porterstemmer dri nltk
     word_tokens = [w.lower() for w in word_tokens] #dibuat ke huruf kecil semua
     punc = str.maketrans('', '', string.punctuation)
     word_tokens = [w.translate(punc) for w in word_tokens] #menghilangkan punctuations
