@@ -50,39 +50,88 @@ def read_first(path_to_folder):
         with open(nama, encoding='utf-8') as f:
             i = 0
             temp = f.read(1)
-            while((temp!='.') and (i<=150)):
+            while ((temp != '.') and (i <= 150)):
                 i += 1
                 temp = f.read(1)
         with open(nama, encoding='utf-8') as f:
-            temp = f.read(i+1)
+            temp = f.read(i + 1)
             kal.append(temp)
     except IOError as exc: #Not sure what error this is
         if exc.errno != errno.EISDIR:
             raise
-    return kal[0]
+    return kal[0][0:150]
 
 def clean_document(example_sent):
+    stop_words = set(stopwords.words('english'))
+    porter = PorterStemmer()
+    word_tokens = word_tokenize(example_sent)  # dibuat ke token
+    word_tokens = [porter.stem(w) for w in word_tokens]  # distem menggunakan porterstemmer dri nltk
+    word_tokens = [w.lower() for w in word_tokens]  # dibuat ke huruf kecil semua
+    punc = str.maketrans('', '', string.punctuation)
+    word_tokens = [w.translate(punc) for w in word_tokens]  # menghilangkan punctuations
+    word_tokens = [w for w in word_tokens if w.isalpha()]  # filter jadi alphabet aja
+    words = [w for w in word_tokens if not w in stop_words]  # filter stopwords
+    return words
+def webclean_document(example_sent):
     factory = StemmerFactory()
     stemmer = factory.create_stemmer()
     example_sent = stemmer.stem(example_sent)
-    stop_words = set(stopwords.words('english'))
     porter = PorterStemmer()
     word_tokens = word_tokenize(example_sent) #dibuat ke token
     word_tokens = [porter.stem(w) for w in word_tokens] #distem menggunakan porterstemmer dri nltk
     word_tokens = [w.lower() for w in word_tokens] #dibuat ke huruf kecil semua
     punc = str.maketrans('', '', string.punctuation)
     word_tokens = [w.translate(punc) for w in word_tokens] #menghilangkan punctuations
-    word_tokens = [w for w in word_tokens if w.isalpha()] #filter jadi alphabet aja
-    words = [w for w in word_tokens if not w in stop_words] #filter stopwords
+    words = [w for w in word_tokens if w.isalpha()] #filter jadi alphabet aja
     return words
-
 def banyak_kata(kalimat,num):
     banyak = []
     for i in range (1,num-1):
         n = np.array(clean_document(str(kalimat[i-1])))
         banyak.append(len(n))
     return banyak
-
+def webquery_table (query, kalimat, num):
+    qmat = [[0 for i in range (num-1)] for j in range (10000)]
+    #input query & kalimat yang telah di clean
+    kata = []
+    found = False
+    # n berguna untuk menampung kalimat dokumen yang sudah di clean
+    for i in range (1,num-1):
+        found = False
+        j = 0
+        # j adalah pengatur kata berikut dalam 1 dokumen
+        n = np.array(webclean_document(str(kalimat[i-1])))
+        #print ("panjang kalimat " + str(len(n)))
+        while (j < len(n)):
+            found = False
+            k = 0
+            while(k < len(kata)) and (found==False):
+                if (kata[k]==n[j]):
+                    qmat[k][i] += 1
+                    found = True
+                else:
+                    k += 1
+            #print("k adalah" + str(k))
+            if (found == False):
+                kata.append(str(n[j]))
+                qmat[k][i] += 1
+            j += 1
+    j = 0
+    q = webclean_document(str(query))
+    while (j < len(q)):
+        k=0
+        found = False
+        while(k < len(kata)) and (found==False):
+            if (kata[k]==q[j]):
+                qmat[k][0] += 1
+                found= True
+            else:
+                k += 1
+        if (found == False):
+            kata.append(str(q[j]))
+            qmat[k][0] += 1
+        j += 1
+    return qmat, kata
 def query_table (query, kalimat, num):
     qmat = [[0 for i in range (num-1)] for j in range (10000)]
     #input query & kalimat yang telah di clean
@@ -255,7 +304,7 @@ def webresult(res,kat):
     filename = "webquery.csv"
     fieldnames, kalimat, num = read_web(kat)
     banyak_kal = banyak_kata(kalimat,num)
-    hmat ,kata = query_table(res, kalimat, num)
+    hmat ,kata = webquery_table(res, kalimat, num)
     score , total_q= similar(hmat,num,kata)
     frek = {}
     judul_tabel=['Term','Query']
