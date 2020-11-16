@@ -12,7 +12,7 @@
 ## General info
 Project ini adalah Project membuat search engine yang menampilkan hasil berdasarkan persen similiaritas,
 hasil pencarian yang persen similiaritasnya paling tinggi akan ditampilkan di paling awal hasil pencarian.
-Project ini bisa mencari query dari file secara lokal, maupun dari web hasil dari webscrapping
+Project ini bisa mencari query dari file secara lokal, maupun dari web hasil dari webscraping
 
 ## Technologies
 * Python - `version 3.8`
@@ -21,7 +21,7 @@ Project ini bisa mencari query dari file secara lokal, maupun dari web hasil dar
 ### Instalasi Awal
 * Pastikan python, sebaiknya python 3.8, sudah terinstall di komputer anda.
 * Pastikan pip juga sudah terinstall di komputer anda.
-* Jika belum maka download dan install terlebih dahulu python 3.8 dan pip, biasanya pip sudah preinstalled dengan python tapi bisa tidak. Kalau tidak, bisa di download dan install sendiri.
+* Jika belum maka download dan install terlebih dahulu python 3.8 dan pip, biasanya pip sudah preinstalled dengan python tapi bisa tidak. Kalau tidak, bisa didownload dan install sendiri.
 * Install beberapa library ini dengan command berikut di terminal python:
 1. `pip install sastrawi`
 2. `pip install nltk`
@@ -48,12 +48,12 @@ Akan keluar window NLTK downloader, pilih download all.
 * Untuk mencari file di local, dari menu utama tekan "File Lokal" kemudian masukkan query yang ingin dicari
 * Untuk mengupload file dari lokal, bisa menekan tab "Upload" dan mengupload file dari komputer
 * Term Table bisa diliat pada tab "Term Table"
-* Untuk mencari lagi, klik tab search atau klik link home dari laman search result
+* Untuk mencari lagi, klik tab search atau klik link home dari halaman search result
 
 ### Search Engine Web
 * Untuk menggunakan pencarian web, dari menu utama tekan "WebScraping" dan memasukkan kategori juga query
 * Term Table bisa diliat pada tab "Web Term Table"
-* Untuk mencari lagi, klik tab search atau klik link home dari laman search result
+* Untuk mencari lagi, klik tab search atau klik link home dari halaman search result
 
 ## Features
 List of features ready and TODOs for future development
