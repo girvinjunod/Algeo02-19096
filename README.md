@@ -15,7 +15,7 @@ hasil pencarian yang persen similiaritasnya paling tinggi akan ditampilkan di pa
 Project ini bisa mencari query dari file secara lokal, maupun dari web hasil dari webscrapping
 
 ## Technologies
-* Python - version 3.8
+* Python - `version 3.8`
 
 ## Setup
 ### Instalasi Awal
@@ -23,21 +23,26 @@ Project ini bisa mencari query dari file secara lokal, maupun dari web hasil dar
 * Pastikan pip juga sudah terinstall di komputer anda.
 * Jika belum maka download dan install terlebih dahulu python 3.8 dan pip, biasanya pip sudah preinstalled dengan python tapi bisa tidak. Kalau tidak, bisa di download dan install sendiri.
 * Install beberapa library ini dengan command berikut di terminal python:
-1. pip install sastrawi
-2. pip install nltk
-3. pip install flask
-4. pip install numpy
-5. pip install beautifulsoup4
-6. pip install pandas
-7. pip install glob2
-8. pip install Werkzeug
-9. pip install requests
-* Jalankan program di python dengan isi "import nltk" di line 1 dan "nltk.download()" di line 2 untuk menginstall nltk. Akan keluar window NLTK downloader, pilih download all.
+1. `pip install sastrawi`
+2. `pip install nltk`
+3. `pip install flask`
+4. `pip install numpy`
+5. `pip install beautifulsoup4`
+6. `pip install pandas`
+7. `pip install glob2`
+8. `pip install Werkzeug`
+9. `pip install requests`
+* Untuk menginstall nltk, jalankan program di python
+```
+>>>import nltk
+>>>nltk.download()
+```
+Akan keluar window NLTK downloader, pilih download all.
 
 ### Menjalankan Program
-* Import file dengan menggunakan "git clone https://github.com/girvinjunod/Algeo02-19096" di gitbash 
-* Jalankan app.py dengan menggunakan command "python app.py" di command prompt.
-* Copy atau ketik ulang link yang dikeluarkan ke dalam browser anda.(http://127.0.0.1:5000/)
+* Import file dengan menggunakan `git clone https://github.com/girvinjunod/Algeo02-19096` di gitbash 
+* Jalankan app.py dengan menggunakan command `python app.py` di command prompt.
+* Copy atau ketik ulang link yang dikeluarkan ke dalam browser anda.`http://127.0.0.1:5000/`
 
 ### Search Engine Lokal 
 * Untuk mencari file di local, dari menu utama tekan "File Lokal" kemudian masukkan query yang ingin dicari
