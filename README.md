@@ -57,8 +57,10 @@ List of features ready and TODOs for future development
 * Mencari hasil pencarian paling relevan dari web yang ada
 * Menunjukan persentase kemiripan semua file yang ada dengan query yang dicari
 
-To-do list:
-* -
+Screenshot:
+![Example Home Page](./src/img/homepage.jpg)
+![Example Upload](./src/img/upload.jpg)
+![Example Upload](./src/img/result.jpg)
 
 ## Status
 Project is: _Finished_
