@@ -51,7 +51,7 @@ Akan keluar window NLTK downloader, pilih download all.
 * Untuk mencari lagi, klik tab search atau klik link home dari laman search result
 
 ### Search Engine Web
-* Untuk menggunakan pencarian web, dari menu utama tekan "WebScraping" dan memasukkan kagegori juga query
+* Untuk menggunakan pencarian web, dari menu utama tekan "WebScraping" dan memasukkan kategori juga query
 * Term Table bisa diliat pada tab "Web Term Table"
 * Untuk mencari lagi, klik tab search atau klik link home dari laman search result
 
