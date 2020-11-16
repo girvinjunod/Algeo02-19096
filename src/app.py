@@ -50,7 +50,7 @@ def read_first(path_to_folder):
         with open(nama, encoding='utf-8') as f:
             i = 0
             temp = f.read(1)
-            while ((temp != '.') and (i <= 150)):
+            while ((temp != '.' and temp != '!' and temp != '?' and temp != "\n") and (i <= 150)):
                 i += 1
                 temp = f.read(1)
         with open(nama, encoding='utf-8') as f:
